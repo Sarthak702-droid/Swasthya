@@ -12,72 +12,108 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-// Defined Epics with assignees and live completion status
+// Defined 10 PRD Epics with assignees and live completion status
 const PROJECT_EPICS = [
   {
     id: 'epic-1',
     code: 'EPIC-01',
-    title: 'Foundation, Auth & Config',
+    title: 'Foundation, Auth & Multi-Schema DB',
     owner: 'Sarthak',
-    role: 'Team Leader',
+    role: 'System Architect',
     status: 'COMPLETE',
     color: 'border-rose-200 bg-rose-50/60 hover:bg-rose-50 text-rose-900',
     badgeColor: 'bg-rose-100 text-rose-800 border-rose-300',
     tasks: '5/5 tasks',
-    description: 'PostgreSQL schema, JWT auth middleware, idempotency engine, Chi setup'
+    description: 'PostgreSQL multi-schema, JWT auth middleware, idempotency engine, Chi setup'
   },
   {
     id: 'epic-2',
     code: 'EPIC-02',
-    title: 'Work Item Core Backend',
+    title: 'Medicine Catalog & Inventory Ledger',
     owner: 'Vaishnavi',
     role: 'District Officer',
-    status: 'COMPLETE',
-    color: 'border-amber-200 bg-amber-50/60 hover:bg-amber-50 text-amber-900',
-    badgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
-    tasks: '6/6 tasks',
-    description: 'Models, domain state machine, repository pattern, Chi handler, tests'
+    status: 'IN_PROGRESS',
+    color: 'border-blue-200 bg-blue-50/60 hover:bg-blue-50 text-blue-900',
+    badgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+    tasks: '5 tasks',
+    description: 'Medicines catalog, batch tracking, FEFO expiration, balance ledger'
   },
   {
     id: 'epic-3',
     code: 'EPIC-03',
-    title: 'Transitions, Queues & Timeline',
+    title: 'Bed & Capacity Monitoring',
     owner: 'Riya',
     role: 'Facility Manager',
-    status: 'COMPLETE',
-    color: 'border-blue-200 bg-blue-50/60 hover:bg-blue-50 text-blue-900',
-    badgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
-    tasks: '7/7 tasks',
-    description: 'Assign/Accept/Complete/Return/Handoff, SLA policy, timeline synthesis'
+    status: 'IN_PROGRESS',
+    color: 'border-indigo-200 bg-indigo-50/60 hover:bg-indigo-50 text-indigo-900',
+    badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-300',
+    tasks: '4 tasks',
+    description: 'ICU/Oxygen/General bed tracking, doctor/nurse on-duty ratios, capacity pressure'
   },
   {
     id: 'epic-4',
     code: 'EPIC-04',
-    title: 'Frontend Work Queue System',
+    title: 'Demand Forecasting & Shortage Risk',
     owner: 'Shneanjali',
-    role: 'Facility Manager',
-    status: 'COMPLETE',
-    color: 'border-purple-200 bg-purple-50/60 hover:bg-purple-50 text-purple-900',
-    badgeColor: 'bg-purple-100 text-purple-800 border-purple-300',
-    tasks: '6/6 tasks',
-    description: 'Next.js App Router, side panel, operational dialogs, TanStack Query'
+    role: 'Logistics Officer',
+    status: 'IN_PROGRESS',
+    color: 'border-amber-200 bg-amber-50/60 hover:bg-amber-50 text-amber-900',
+    badgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+    tasks: '5 tasks',
+    description: '7-day rolling consumption, days-of-cover, critical shortage risk threshold'
   },
   {
     id: 'epic-5',
     code: 'EPIC-05',
-    title: 'System Integration & Seed Data',
+    title: 'Safe Surplus Redistribution & Scoring',
     owner: 'Sarthak',
-    role: 'Team Leader',
-    status: 'COMPLETE',
+    role: 'System Architect',
+    status: 'IN_PROGRESS',
     color: 'border-emerald-200 bg-emerald-50/60 hover:bg-emerald-50 text-emerald-900',
     badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
-    tasks: '5/5 tasks',
-    description: 'Work generator, deduplication check, Odisha PHC seed dataset, audit trails'
+    tasks: '5 tasks',
+    description: 'Safe surplus formula, multi-factor recommendation ranking, candidate matching'
   },
   {
     id: 'epic-6',
     code: 'EPIC-06',
-    title: 'Operational Chat & AI Copilot',
+    title: 'Transfer Lifecycle & Dual-Inventory',
+    owner: 'Vaishnavi',
+    role: 'District Officer',
+    status: 'IN_PROGRESS',
+    color: 'border-violet-200 bg-violet-50/60 hover:bg-violet-50 text-violet-900',
+    badgeColor: 'bg-violet-100 text-violet-800 border-violet-300',
+    tasks: '4 tasks',
+    description: 'State machine (DRAFT to COMPLETED), in-transit inventory escrow, auto work ticket'
+  },
+  {
+    id: 'epic-7',
+    code: 'EPIC-07',
+    title: 'Operational Work Queue & Tasks',
+    owner: 'Shneanjali & Riya',
+    role: 'Ops Officers',
+    status: 'COMPLETE',
+    color: 'border-teal-200 bg-teal-50/60 hover:bg-teal-50 text-teal-900',
+    badgeColor: 'bg-teal-100 text-teal-800 border-teal-300',
+    tasks: '6/6 tasks',
+    description: 'State machine lifecycle, priority queues, SLA breach tracking, immutable audit log'
+  },
+  {
+    id: 'epic-8',
+    code: 'EPIC-08',
+    title: 'Executive Dashboard & GIS Map',
+    owner: 'Riya',
+    role: 'Facility Manager',
+    status: 'IN_PROGRESS',
+    color: 'border-orange-200 bg-orange-50/60 hover:bg-orange-50 text-orange-900',
+    badgeColor: 'bg-orange-100 text-orange-800 border-orange-300',
+    tasks: '4 tasks',
+    description: 'Executive KPIs, Leaflet GIS map of Odisha health facilities, alert markers'
+  },
+  {
+    id: 'epic-9',
+    code: 'EPIC-09',
+    title: 'Collaboration & AI Copilot Chat',
     owner: 'Sarthak',
     role: 'Lead & Agent Team',
     status: 'IN_PROGRESS',
@@ -85,6 +121,18 @@ const PROJECT_EPICS = [
     badgeColor: 'bg-cyan-100 text-cyan-800 border-cyan-300',
     tasks: '14 tasks',
     description: 'Role-scoped channels, interactive cards, and ArogyaGrid AI Copilot'
+  },
+  {
+    id: 'epic-10',
+    code: 'EPIC-10',
+    title: 'Scheduler & Odisha Demo Dataset',
+    owner: 'Sarthak',
+    role: 'System Architect',
+    status: 'IN_PROGRESS',
+    color: 'border-slate-200 bg-slate-50/60 hover:bg-slate-50 text-slate-900',
+    badgeColor: 'bg-slate-100 text-slate-800 border-slate-300',
+    tasks: '5 tasks',
+    description: 'Cron scheduler, Odisha multi-tier PHC/CHC dataset, synthetic demand spike simulation'
   }
 ];
 
@@ -195,7 +243,7 @@ export function WorkQueuePage() {
                 </span>
               </div>
               <p className="text-xs text-slate-300 mt-0.5">
-                Inspect all 6 Epics & 56 itemized tasks engineered across <strong className="text-white">Sarthak</strong>, <strong className="text-white">Vaishnavi</strong>, <strong className="text-white">Riya</strong>, and <strong className="text-white">Shneanjali</strong>.
+                Inspect all 10 PRD Epics & 56 itemized tasks engineered across <strong className="text-white">Sarthak</strong>, <strong className="text-white">Vaishnavi</strong>, <strong className="text-white">Riya</strong>, and <strong className="text-white">Shneanjali</strong>.
               </p>
             </div>
           </div>
@@ -204,7 +252,7 @@ export function WorkQueuePage() {
             href="/epics"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold transition shadow shrink-0 hover:scale-105"
           >
-            <span>Open Team Epics Board</span>
+            <span>Open 10 Epics Board</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -216,26 +264,26 @@ export function WorkQueuePage() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3.5">
             <div>
               <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
-                Team Epics & Task Distribution
+                10 PRD Epics & Supply Chain Engine
               </h2>
               <p className="text-xs text-slate-400">
-                Managed by Team Leader <span className="font-semibold text-slate-700">Sarthak</span> across 4 officers
+                Covers Full PRD Scope: Inventory, Forecasting, Transfers, Work Queue, GIS Map & AI Copilot
               </p>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
-                6 Epics Configured (5 Complete, 1 Active)
+                10 PRD Epics (2 Complete, 8 Active/Roadmap)
               </span>
               <Link
                 href="/epics"
                 className="text-xs font-bold text-teal-700 hover:text-teal-800 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded border border-teal-200 transition flex items-center gap-1"
               >
-                <span>Full 6 Epics Board →</span>
+                <span>Full 10 Epics Board →</span>
               </Link>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {PROJECT_EPICS.map((epic) => {
               const isSelected = selectedEpic.includes(epic.code) || (selectedEpic === epic.title);
               const isComplete = epic.status === 'COMPLETE';

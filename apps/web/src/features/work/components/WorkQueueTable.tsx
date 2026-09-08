@@ -14,23 +14,23 @@ interface Props {
 export const getWorkItemEpic = (type: string): { name: string; member: string; color: string } => {
   switch (type) {
     case 'STOCK_SHORTAGE_REVIEW':
-      return { name: 'Epic 3: Shortage Reviews', member: 'Riya', color: 'bg-blue-100 text-blue-800 border-blue-200' };
+      return { name: 'EPIC-04: Shortage Risk', member: 'Shneanjali', color: 'bg-amber-100 text-amber-800 border-amber-200' };
     case 'TRANSFER_RECOMMENDATION_APPROVAL':
-      return { name: 'Epic 2: Transfer Approvals', member: 'Vaishnavi', color: 'bg-amber-100 text-amber-800 border-amber-200' };
+      return { name: 'EPIC-05: Surplus Redistribution', member: 'Sarthak', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
     case 'TRANSFER_DISPATCH':
-      return { name: 'Epic 4: Dispatch Operations', member: 'Shneanjali', color: 'bg-purple-100 text-purple-800 border-purple-200' };
+      return { name: 'EPIC-06: Transfer Execution', member: 'Vaishnavi', color: 'bg-purple-100 text-purple-800 border-purple-200' };
     case 'TRANSFER_RECEIPT':
-      return { name: 'Epic 3: Supply Receipt', member: 'Riya', color: 'bg-blue-100 text-blue-800 border-blue-200' };
+      return { name: 'EPIC-06: Transfer Execution', member: 'Vaishnavi', color: 'bg-purple-100 text-purple-800 border-purple-200' };
     case 'CAPACITY_OVERLOAD':
-      return { name: 'Epic 1: Emergency Response', member: 'Sarthak', color: 'bg-rose-100 text-rose-800 border-rose-200' };
+      return { name: 'EPIC-03: Bed Capacity', member: 'Riya', color: 'bg-indigo-100 text-indigo-800 border-indigo-200' };
     case 'EXPIRY_RISK':
-      return { name: 'Epic 3: Expiry Risk Control', member: 'Riya', color: 'bg-blue-100 text-blue-800 border-blue-200' };
+      return { name: 'EPIC-02: Inventory Ledger', member: 'Vaishnavi', color: 'bg-blue-100 text-blue-800 border-blue-200' };
     case 'INVENTORY_DISCREPANCY':
-      return { name: 'Epic 2: Inventory Auditing', member: 'Vaishnavi', color: 'bg-amber-100 text-amber-800 border-amber-200' };
+      return { name: 'EPIC-02: Inventory Ledger', member: 'Vaishnavi', color: 'bg-blue-100 text-blue-800 border-blue-200' };
     case 'DATA_QUALITY_ISSUE':
-      return { name: 'Epic 5: Data Integration', member: 'Sarthak', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
+      return { name: 'EPIC-01: Foundation & DB', member: 'Sarthak', color: 'bg-rose-100 text-rose-800 border-rose-200' };
     default:
-      return { name: 'Epic 1: Platform Core', member: 'Sarthak', color: 'bg-gray-100 text-gray-800 border-gray-200' };
+      return { name: 'EPIC-07: Work Queue', member: 'Shneanjali', color: 'bg-teal-100 text-teal-800 border-teal-200' };
   }
 };
 

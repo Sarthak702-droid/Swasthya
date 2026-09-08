@@ -17,7 +17,7 @@ export default function Home() {
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Enterprise Work Item & Epic Management System engineered across 5 core Epics and 42 itemized deliverables for public healthcare resource coordination.
+            Enterprise Work Item & Epic Management System engineered across 10 PRD Epics and 56 itemized deliverables for public healthcare resource coordination.
           </p>
 
           {/* Primary Action Buttons */}
@@ -27,7 +27,7 @@ export default function Home() {
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-base shadow-lg transition-all hover:scale-105"
             >
               <Layers className="w-5 h-5" />
-              <span>Explore Team Epics & Tasks</span>
+              <span>Explore 10 PRD Epics & Tasks</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 
@@ -52,36 +52,36 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center">
                   <Layers className="w-6 h-6" />
                 </div>
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                  6 Epics (5 Complete, 1 Active)
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800 border border-teal-300">
+                  10 PRD Epics (2 Complete, 8 Roadmap)
                 </span>
               </div>
 
               <div>
                 <h2 className="text-xl font-bold text-slate-900">
-                  Team Epics & Task Architecture
+                  10 PRD Epics & Architecture
                 </h2>
                 <p className="text-sm text-slate-600 mt-2 leading-relaxed">
-                  Full visibility into the entire project engineering lifecycle. View each member&apos;s contributions, itemized subtasks with live status badges, deliverable code files, and unit test verifications.
+                  Full visibility into the entire ArogyaGrid PRD engineering lifecycle. View all 10 core supply chain and ops epics across multi-schema DB, inventory ledger, capacity monitoring, demand forecast, safe surplus, work queues, GIS map, and AI copilot.
                 </p>
               </div>
 
               <div className="space-y-2 pt-2 border-t border-slate-100 text-xs text-slate-600">
                 <div className="flex items-center justify-between">
                   <span>👑 Sarthak (Lead)</span>
-                  <span className="font-semibold text-slate-900">Epic 1 & 5 (15 Tasks)</span>
+                  <span className="font-semibold text-slate-900">Epic 1, 5, 9, 10 (29 Tasks)</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>📋 Vaishnavi (District)</span>
-                  <span className="font-semibold text-slate-900">Epic 2 (8 Tasks)</span>
+                  <span className="font-semibold text-slate-900">Epic 2, 6 (9 Tasks)</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>🏥 Riya (Facility)</span>
-                  <span className="font-semibold text-slate-900">Epic 3 (9 Tasks)</span>
+                  <span className="font-semibold text-slate-900">Epic 3, 7, 8 (11 Tasks)</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>🚚 Shneanjali (Logistics)</span>
-                  <span className="font-semibold text-slate-900">Epic 4 (10 Tasks)</span>
+                  <span className="font-semibold text-slate-900">Epic 4, 7 (8 Tasks)</span>
                 </div>
               </div>
             </div>

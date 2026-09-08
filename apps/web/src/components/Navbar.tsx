@@ -12,8 +12,8 @@ export function Navbar() {
       label: 'Team Epics & Tasks',
       href: '/epics',
       icon: Layers,
-      badge: '6 Epics (5 Done, 1 Active)',
-      badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+      badge: '10 PRD Epics',
+      badgeColor: 'bg-teal-100 text-teal-800 border-teal-300',
     },
     {
       label: 'Operational Work Queue',

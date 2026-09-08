@@ -22,7 +22,12 @@ import {
   Server,
   Database,
   Terminal,
-  Activity
+  Activity,
+  MapPin,
+  MessageSquare,
+  BarChart3,
+  Calendar,
+  AlertTriangle
 } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -38,7 +43,7 @@ export interface EpicTask {
   status: 'COMPLETE' | 'IN_PROGRESS' | 'BACKLOG';
   files: string[];
   verification: string;
-  category: 'Backend Core' | 'Database' | 'Security & Auth' | 'Frontend UI' | 'Integration & Seed';
+  category: 'Backend Core' | 'Database' | 'Security & Auth' | 'Frontend UI' | 'Integration & Seed' | 'Analytics & ML';
 }
 
 export interface EpicItem {
@@ -48,6 +53,7 @@ export interface EpicItem {
   owner: 'Sarthak' | 'Vaishnavi' | 'Riya' | 'Shneanjali';
   ownerRole: string;
   description: string;
+  prdSection: string;
   status: 'COMPLETE' | 'IN_PROGRESS' | 'BACKLOG';
   color: string;
   badgeBg: string;
@@ -56,14 +62,18 @@ export interface EpicItem {
 }
 
 export const EPICS_DATA: EpicItem[] = [
+  // -------------------------------------------------------------
+  // EPIC 1: Foundation, Auth & DB Infrastructure
+  // -------------------------------------------------------------
   {
     id: 'epic-1',
     code: 'EPIC-01',
-    title: 'Foundation, Auth & Database Infrastructure',
+    title: 'Foundation, Auth, Multi-Schema DB & DevOps',
     owner: 'Sarthak',
     ownerRole: 'Team Leader & System Architect',
+    prdSection: 'PRD §7.1, §11, §14',
     description:
-      'Multi-schema PostgreSQL database engine, robust JWT authentication middleware, transaction-safe idempotency engine, monorepo automation tooling, and environment configuration.',
+      'Multi-schema PostgreSQL 16 database engine, robust JWT authentication middleware, transaction-safe idempotency engine, monorepo automation tooling, and environment configuration.',
     status: 'COMPLETE',
     color: 'border-rose-200 bg-rose-50/50',
     badgeBg: 'bg-rose-100 text-rose-800 border-rose-300',
@@ -74,7 +84,7 @@ export const EPICS_DATA: EpicItem[] = [
         code: 'TASK-01-01',
         title: 'Multi-Schema Database Architecture',
         description:
-          'Designed and deployed PostgreSQL 16 multi-schema structure isolating identity (iam), healthcare facilities (core), work orders (work), and immutable audit logs (audit) with strict foreign keys.',
+          'Designed and deployed PostgreSQL 16 multi-schema structure isolating identity (iam), facilities (core), work orders (work), and immutable audit logs (audit).',
         assignee: 'Sarthak',
         assigneeRole: 'Team Leader',
         status: 'COMPLETE',
@@ -85,13 +95,13 @@ export const EPICS_DATA: EpicItem[] = [
       {
         id: 't-102',
         code: 'TASK-01-02',
-        title: 'Database Migrations Engine & Query Tooling',
+        title: 'Database Migrations Engine & sqlc Configuration',
         description:
           'Constructed forward and rollback database migration scripts and prepared sqlc type-safe query generation configurations.',
         assignee: 'Sarthak',
         assigneeRole: 'Team Leader',
         status: 'COMPLETE',
-        files: ['apps/api/db/migrations/001_work_schema.sql', 'apps/api/db/sqlc.yaml', 'apps/api/db/queries/work.sql'],
+        files: ['apps/api/db/migrations/001_work_schema.sql', 'apps/api/db/sqlc.yaml'],
         verification: 'Table schema verified in PostgreSQL',
         category: 'Database'
       },
@@ -104,7 +114,7 @@ export const EPICS_DATA: EpicItem[] = [
         assignee: 'Sarthak',
         assigneeRole: 'Team Leader',
         status: 'COMPLETE',
-        files: ['apps/api/internal/middleware/auth.go', 'apps/api/internal/auth/jwt.go'],
+        files: ['apps/api/internal/middleware/auth.go'],
         verification: 'Bearer token verification passes with valid & invalid claims',
         category: 'Security & Auth'
       },
@@ -113,7 +123,7 @@ export const EPICS_DATA: EpicItem[] = [
         code: 'TASK-01-04',
         title: 'Idempotency Engine & Deduplication Storage',
         description:
-          'Built HTTP middleware intercepting `Idempotency-Key` headers, caching API response bodies, and preventing duplicate actions or replay attacks on transitions.',
+          'Built HTTP middleware intercepting Idempotency-Key headers, caching API response bodies, and preventing duplicate actions or replay attacks.',
         assignee: 'Sarthak',
         assigneeRole: 'Team Leader',
         status: 'COMPLETE',
@@ -124,185 +134,104 @@ export const EPICS_DATA: EpicItem[] = [
       {
         id: 't-105',
         code: 'TASK-01-05',
-        title: 'IAM Identity & RBAC Tables',
-        description:
-          'Constructed `iam.users`, `iam.teams`, `iam.team_members`, and `iam.sessions` tables supporting multi-tier roles (Facility Manager, District Officer, State/National Admin).',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['apps/api/db/migrations/001_work_schema.sql'],
-        verification: 'IAM tables queryable with role constraints',
-        category: 'Database'
-      },
-      {
-        id: 't-106',
-        code: 'TASK-01-06',
-        title: 'Core Healthcare Facility Registry',
-        description:
-          'Created `core.facilities` catalog registering Primary Health Centers (PHCs), Community Health Centers (CHCs), and District Hospitals with geo-coordinates and bed capacities.',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['apps/api/db/migrations/001_work_schema.sql'],
-        verification: 'Foreign key integrity linked to work items',
-        category: 'Database'
-      },
-      {
-        id: 't-107',
-        code: 'TASK-01-07',
-        title: 'Centralized Application Configuration Loader',
-        description:
-          'Built type-safe config loader supporting environment overrides, production defaults, database connection pooling parameters, and JWT secret management.',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/config/config.go'],
-        verification: 'Loads DB URL and port 8085 cleanly',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-108',
-        code: 'TASK-01-08',
         title: 'Developer Tooling, Makefile & Monorepo Runner',
         description:
-          'Built single-command automation via root `Makefile` and `start-dashboard.sh` orchestrating PostgreSQL, Go Chi API (:8085), and Next.js (:3000).',
+          'Built single-command automation via root Makefile and start-dashboard.sh orchestrating PostgreSQL, Go Chi API (:8085), and Next.js (:3000).',
         assignee: 'Sarthak',
         assigneeRole: 'Team Leader',
         status: 'COMPLETE',
         files: ['Makefile', 'start-dashboard.sh', 'docker-compose.yml'],
-        verification: 'Single `make dev` boots all services with zero manual steps',
+        verification: 'Single make dev boots all services with zero manual steps',
         category: 'Integration & Seed'
       }
     ]
   },
+
+  // -------------------------------------------------------------
+  // EPIC 2: Medicine Catalog & Operational Inventory Ledger
+  // -------------------------------------------------------------
   {
     id: 'epic-2',
     code: 'EPIC-02',
-    title: 'Work Item Core Backend & State Machine',
+    title: 'Medicine Catalog & Operational Inventory Ledger',
     owner: 'Vaishnavi',
     ownerRole: 'District Officer & Core Domain Lead',
+    prdSection: 'PRD §7.3, §7.4',
     description:
-      'Domain models, deterministic finite state machine (WAITING ➔ ASSIGNED ➔ IN_PROGRESS ➔ COMPLETED / RETURNED), database repository abstraction layer, and Chi HTTP routing.',
-    status: 'COMPLETE',
-    color: 'border-amber-200 bg-amber-50/50',
-    badgeBg: 'bg-amber-100 text-amber-800 border-amber-300',
-    iconBg: 'bg-amber-600',
+      'Generic medicine master catalogue (criticality, cold-chain flag), facility inventory balances, and immutable transaction ledger for stock-in, consumption, and adjustments.',
+    status: 'IN_PROGRESS',
+    color: 'border-emerald-200 bg-emerald-50/50',
+    badgeBg: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+    iconBg: 'bg-emerald-600',
     tasks: [
       {
         id: 't-201',
         code: 'TASK-02-01',
-        title: 'Work Item Domain Entity Models & Enums',
+        title: 'Generic Medicine Master Catalog Schema',
         description:
-          'Authored Go domain types including WorkItem, WorkStatus (waiting, assigned, in_progress, completed, returned), WorkPriority (low, normal, high, urgent), and WorkType.',
+          'Create core.medicines table supporting generic_name, unit, criticality (routine, important, critical), and cold_chain_required flag.',
         assignee: 'Vaishnavi',
         assigneeRole: 'District Officer',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/models.go'],
-        verification: 'Domain models imported across entire work package',
-        category: 'Backend Core'
+        status: 'IN_PROGRESS',
+        files: ['apps/api/db/migrations/003_inventory_schema.sql'],
+        verification: 'Table core.medicines created with unique code index',
+        category: 'Database'
       },
       {
         id: 't-202',
         code: 'TASK-02-02',
-        title: 'Deterministic Finite State Machine Engine',
+        title: 'Facility Inventory Balances Table',
         description:
-          'Engineered state transition rules matrix strictly enforcing valid transitions, blocking invalid skips (e.g. waiting to completed), and validating role permissions.',
+          'Implement inventory.balances table with (facility_id, medicine_id) unique constraint, current_qty, and safety_stock thresholds.',
         assignee: 'Vaishnavi',
         assigneeRole: 'District Officer',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/transitions.go'],
-        verification: 'Covered by 19 unit tests in transitions_test.go',
-        category: 'Backend Core'
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/inventory/models.go', 'repository.go'],
+        verification: 'Row-level locking on balance mutations verified',
+        category: 'Database'
       },
       {
         id: 't-203',
         code: 'TASK-02-03',
-        title: 'Work Item Repository Interface Definition',
+        title: 'Immutable Inventory Transaction Ledger',
         description:
-          'Specified Go repository interface contract decoupling business rules from SQL storage: Create, GetByID, ListByQueue, UpdateStatus, and transactional mutations.',
+          'Implement inventory.transactions append-only table recording stock-in, consumption, expired, damaged, transfer-in, and transfer-out events.',
         assignee: 'Vaishnavi',
         assigneeRole: 'District Officer',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/repository.go'],
-        verification: 'Clean architectural boundary validated',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/inventory/service.go'],
+        verification: 'Every balance update backed by an immutable transaction row',
         category: 'Backend Core'
       },
       {
         id: 't-204',
         code: 'TASK-02-04',
-        title: 'PostgreSQL Repository Implementation via pgx v5',
+        title: 'Negative Inventory Prevention Invariant',
         description:
-          'Implemented high-performance PostgreSQL repository using connection pooling, prepared statements, ACID transaction wrappers, and version checks.',
+          'Enforce strict database constraint and service check: transactions attempting to reduce stock below 0 are rejected with INSUFFICIENT_STOCK.',
         assignee: 'Vaishnavi',
         assigneeRole: 'District Officer',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/postgres_repository.go'],
-        verification: 'All CRUD and transactional transitions execute against PG 16',
-        category: 'Database'
-      },
-      {
-        id: 't-205',
-        code: 'TASK-02-05',
-        title: 'Core Work Item Service Layer',
-        description:
-          'Constructed application service orchestrating validation, state transitions, timeline generation, optimistic lock checks, and audit logging.',
-        assignee: 'Vaishnavi',
-        assigneeRole: 'District Officer',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/service.go'],
-        verification: 'Service methods tested and verified via handlers',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-206',
-        code: 'TASK-02-06',
-        title: 'RESTful Chi HTTP Route Handlers',
-        description:
-          'Built HTTP controllers for GET /items/{id}, POST /items, GET /queue, status transitions, and timeline query endpoints with structured JSON responses.',
-        assignee: 'Vaishnavi',
-        assigneeRole: 'District Officer',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/handler.go'],
-        verification: 'Chi router responds on port 8085 with 200 OK',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-207',
-        code: 'TASK-02-07',
-        title: 'Request DTOs & Domain Input Validation',
-        description:
-          'Built strict request payloads with UUID format validation, required fields verification, and domain error translation into RFC-7807 compliant JSON errors.',
-        assignee: 'Vaishnavi',
-        assigneeRole: 'District Officer',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/dto.go', 'apps/api/internal/work/validation.go', 'apps/api/internal/work/errors.go'],
-        verification: 'Invalid JSON inputs rejected with 400 Bad Request',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-208',
-        code: 'TASK-02-08',
-        title: 'Comprehensive State Machine Unit Tests',
-        description:
-          'Wrote 19 unit test cases exercising all permitted transitions (assign, accept, complete, return, handoff) and rejecting unauthorized state changes.',
-        assignee: 'Vaishnavi',
-        assigneeRole: 'District Officer',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/transitions_test.go', 'apps/api/internal/work/service_test.go'],
-        verification: '`go test -v ./internal/work/...` passes 19/19 (100%)',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/inventory/validation.go'],
+        verification: 'Unit test verifying rejection of negative stock deduction',
         category: 'Backend Core'
       }
     ]
   },
+
+  // -------------------------------------------------------------
+  // EPIC 3: Bed & Workforce Capacity Monitoring
+  // -------------------------------------------------------------
   {
     id: 'epic-3',
     code: 'EPIC-03',
-    title: 'Transitions, Queues & SLA Engine',
+    title: 'Bed & Workforce Capacity Monitoring',
     owner: 'Riya',
-    ownerRole: 'Facility Manager & Transitions Lead',
+    ownerRole: 'Facility Manager & Operations Lead',
+    prdSection: 'PRD §7.5',
     description:
-      'Full operational transition pipeline (assign, accept, reassign, return, complete, handoff), automated SLA breach detection & dynamic due-dates, activity timeline synthesis, and threaded comments.',
-    status: 'COMPLETE',
+      'Time-series capacity snapshots recording total beds, occupied beds, available beds, active doctors, and nurses, with facility capacity stress alerts.',
+    status: 'IN_PROGRESS',
     color: 'border-blue-200 bg-blue-50/50',
     badgeBg: 'bg-blue-100 text-blue-800 border-blue-300',
     iconBg: 'bg-blue-600',
@@ -310,401 +239,415 @@ export const EPICS_DATA: EpicItem[] = [
       {
         id: 't-301',
         code: 'TASK-03-01',
-        title: 'Work Item Assignment & Team Routing Engine',
+        title: 'Capacity Snapshot Schema & Repository',
         description:
-          'Built assignment transition pipeline supporting direct user allocation and team queue dispatching, logging actor and assignment duration.',
+          'Implement capacity.snapshots table capturing facility_id, beds_total, beds_occupied, doctors_available, nurses_available, and captured_at.',
         assignee: 'Riya',
         assigneeRole: 'Facility Manager',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/service.go', 'apps/api/internal/work/handler.go'],
-        verification: 'POST /items/{id}/transitions/assign moves status to ASSIGNED',
-        category: 'Backend Core'
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/capacity/models.go', 'repository.go'],
+        verification: 'Snapshots queryable with time-series ordering',
+        category: 'Database'
       },
       {
         id: 't-302',
         code: 'TASK-03-02',
-        title: 'Worker Acceptance & Progression Pipeline',
+        title: 'Facility Bed Occupancy & Capacity Stress Engine',
         description:
-          'Engineered worker acceptance action moving tickets from ASSIGNED to IN_PROGRESS, recording started_at timestamp and calculating SLA burn rate.',
+          'Calculate bed occupancy ratio (occupied / total) and trigger CAPACITY_STRESS alerts when occupancy exceeds 90% or staff falls below emergency threshold.',
         assignee: 'Riya',
         assigneeRole: 'Facility Manager',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/service.go', 'apps/api/internal/work/transitions.go'],
-        verification: 'POST /items/{id}/transitions/accept moves status to IN_PROGRESS',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/capacity/service.go'],
+        verification: 'Emits alert when simulated occupancy reaches 95%',
         category: 'Backend Core'
       },
       {
         id: 't-303',
         code: 'TASK-03-03',
-        title: 'Task Return Flow with Reason Categorization',
+        title: 'Capacity REST Endpoints for PHC Operators',
         description:
-          'Built return transition allowing field workers to reject unserviceable tickets (e.g. stockout, equipment breakdown) with mandatory structured reason codes.',
+          'Build GET /facilities/{id}/capacity and POST /facilities/{id}/capacity/snapshots endpoints for quick mobile/web ward updates.',
         assignee: 'Riya',
         assigneeRole: 'Facility Manager',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/service.go', 'apps/api/internal/work/dto.go'],
-        verification: 'POST /items/{id}/transitions/return updates status to RETURNED',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/capacity/handler.go'],
+        verification: 'API returns latest snapshot within 50ms',
         category: 'Backend Core'
-      },
-      {
-        id: 't-304',
-        code: 'TASK-03-04',
-        title: 'Task Resolution & Completion Reporting',
-        description:
-          'Constructed completion pipeline recording completion timestamps, outcome notes, and updating parent medical record statuses.',
-        assignee: 'Riya',
-        assigneeRole: 'Facility Manager',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/service.go'],
-        verification: 'POST /items/{id}/transitions/complete marks status as COMPLETED',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-305',
-        code: 'TASK-03-05',
-        title: 'Inter-Facility Handoff Protocol',
-        description:
-          'Implemented patient and stock transfer handoff flow transferring work responsibility between PHCs, CHCs, and District Hospitals with chain-of-custody logging.',
-        assignee: 'Riya',
-        assigneeRole: 'Facility Manager',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/service.go', 'work.work_item_handoffs table'],
-        verification: 'POST /items/{id}/transitions/handoff writes handoff history',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-306',
-        code: 'TASK-03-06',
-        title: 'Priority & SLA Policy Engine with Dynamic Escalation',
-        description:
-          'Engineered dynamic due-date calculation assigning SLAs based on priority: Urgent (2 hrs), High (6 hrs), Normal (24 hrs), Low (72 hrs).',
-        assignee: 'Riya',
-        assigneeRole: 'Facility Manager',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/sla_policy.go'],
-        verification: 'SLA due_at verified in database on item creation',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-307',
-        code: 'TASK-03-07',
-        title: 'Activity Timeline Synthesis Service',
-        description:
-          'Built timeline compiler aggregating status changes, assignments, handoffs, comments, and system notes into a unified chronologically sorted stream.',
-        assignee: 'Riya',
-        assigneeRole: 'Facility Manager',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/timeline.go'],
-        verification: 'GET /items/{id}/timeline returns aggregated chronological events',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-308',
-        code: 'TASK-03-08',
-        title: 'Threaded Comments & Internal Discussion API',
-        description:
-          'Implemented real-time collaboration comments endpoint with author tracking, timestamping, and internal visibility controls.',
-        assignee: 'Riya',
-        assigneeRole: 'Facility Manager',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/handler.go', 'work.work_item_comments table'],
-        verification: 'POST & GET /items/{id}/comments return discussion feed',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-309',
-        code: 'TASK-03-09',
-        title: 'Optimistic Concurrency Control via Entity Versioning',
-        description:
-          'Implemented atomic version incrementing (`version = version + 1 WHERE version = @expected`) preventing lost updates when two officers update concurrently.',
-        assignee: 'Riya',
-        assigneeRole: 'Facility Manager',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/postgres_repository.go'],
-        verification: 'Stale version update rejected with concurrency conflict error',
-        category: 'Database'
       }
     ]
   },
+
+  // -------------------------------------------------------------
+  // EPIC 4: Demand Aggregation, Forecasting & Shortage Risk Engine
+  // -------------------------------------------------------------
   {
     id: 'epic-4',
     code: 'EPIC-04',
-    title: 'Frontend Work System & Interactive UI',
+    title: 'Demand Aggregation, Forecasting & Shortage Risk Engine',
+    owner: 'Sarthak',
+    ownerRole: 'Team Leader & Lead Architect',
+    prdSection: 'PRD §8',
+    description:
+      'Aggregates daily medicine consumption, calculates rolling 7-day average daily demand, projects 3–7 day forecasts, and computes Days-of-Cover to trigger automated shortage risk alerts.',
+    status: 'IN_PROGRESS',
+    color: 'border-amber-200 bg-amber-50/50',
+    badgeBg: 'bg-amber-100 text-amber-800 border-amber-300',
+    iconBg: 'bg-amber-600',
+    tasks: [
+      {
+        id: 't-401',
+        code: 'TASK-04-01',
+        title: 'Daily Demand Aggregation Pipeline',
+        description:
+          'Construct intelligence.daily_demand pipeline grouping consumption transactions by date, facility, and medicine with patient footfall metrics.',
+        assignee: 'Sarthak',
+        assigneeRole: 'Team Leader',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/demand/aggregation.go'],
+        verification: 'Produces clean daily demand feature rows from raw transactions',
+        category: 'Analytics & ML'
+      },
+      {
+        id: 't-402',
+        code: 'TASK-04-02',
+        title: 'Baseline 3–7 Day Demand Forecast Engine',
+        description:
+          'Implement rolling 7-day consumption average: average_daily_demand = sum(7d)/7; forecast_3d = average_daily_demand * 3.',
+        assignee: 'Sarthak',
+        assigneeRole: 'Team Leader',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/forecast/baseline.go'],
+        verification: 'Unit tests confirm deterministic 3-day and 7-day forecast output',
+        category: 'Analytics & ML'
+      },
+      {
+        id: 't-403',
+        code: 'TASK-04-03',
+        title: 'Days-of-Cover & Shortage Risk Classifier',
+        description:
+          'Implement days_of_cover = current_stock / max(daily_demand, 1). Classify risk: CRITICAL (<2d), HIGH (<4d), MEDIUM (<7d), LOW (otherwise).',
+        assignee: 'Sarthak',
+        assigneeRole: 'Team Leader',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/risk/classifier.go'],
+        verification: 'Correctly classifies 1.5 days cover as CRITICAL risk alert',
+        category: 'Analytics & ML'
+      },
+      {
+        id: 't-404',
+        code: 'TASK-04-04',
+        title: 'Risk Alerts Queue & Reason Codes',
+        description:
+          'Store alerts in intelligence.risk_alerts with structured reason codes (STOCKOUT_WITHIN_72H, CRITICAL_MEDICINE, RECENT_SURGE).',
+        assignee: 'Sarthak',
+        assigneeRole: 'Team Leader',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/risk/service.go'],
+        verification: 'GET /risks returns active prioritized alerts queue',
+        category: 'Backend Core'
+      }
+    ]
+  },
+
+  // -------------------------------------------------------------
+  // EPIC 5: Safe Surplus Redistribution & Scoring Engine
+  // -------------------------------------------------------------
+  {
+    id: 'epic-5',
+    code: 'EPIC-05',
+    title: 'Safe Surplus Redistribution & Scoring Engine',
+    owner: 'Vaishnavi',
+    ownerRole: 'District Officer & Core Domain Lead',
+    prdSection: 'PRD §9.1–9.4',
+    description:
+      'Mathematical redistribution engine calculating safe donor surplus (Stock - Safety Stock - Demand Buffer), computing Haversine distances, and ranking donor facilities with multi-factor scoring.',
+    status: 'IN_PROGRESS',
+    color: 'border-indigo-200 bg-indigo-50/50',
+    badgeBg: 'bg-indigo-100 text-indigo-800 border-indigo-300',
+    iconBg: 'bg-indigo-600',
+    tasks: [
+      {
+        id: 't-501',
+        code: 'TASK-05-01',
+        title: 'Safe Surplus Mathematical Formula',
+        description:
+          'Implement PRD §9.2: safe_surplus = current_stock - safety_stock - predicted_demand_buffer. Guarantee donor never becomes unsafe post-transfer.',
+        assignee: 'Vaishnavi',
+        assigneeRole: 'District Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/redistribution/surplus.go'],
+        verification: 'Tests prove donor with 150 units & 100 safety has max 50 surplus',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-502',
+        code: 'TASK-05-02',
+        title: 'Haversine Geographic Proximity Scoring',
+        description:
+          'Compute real-world road/great-circle distance between donor and recipient facilities in kilometers using latitude/longitude.',
+        assignee: 'Vaishnavi',
+        assigneeRole: 'District Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/pkg/geo/haversine.go'],
+        verification: 'Distance verified between Bhubaneswar and Jatni (approx 22km)',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-503',
+        code: 'TASK-05-03',
+        title: 'Multi-Factor Donor Candidate Scoring Algorithm',
+        description:
+          'Implement score = 0.40 * surplus + 0.30 * proximity + 0.20 * safety + 0.10 * urgency. Rank eligible donors descending.',
+        assignee: 'Vaishnavi',
+        assigneeRole: 'District Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/redistribution/scoring.go'],
+        verification: 'Weights configurable via backend config without hardcoded values',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-504',
+        code: 'TASK-05-04',
+        title: 'Explainable Transfer Recommendation Generator',
+        description:
+          'Build recommendation payload showing destination, source, quantity, distance, score, reason codes, and human-readable explanation.',
+        assignee: 'Vaishnavi',
+        assigneeRole: 'District Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/redistribution/service.go'],
+        verification: 'POST /recommendations/generate returns ranked eligible donors',
+        category: 'Backend Core'
+      }
+    ]
+  },
+
+  // -------------------------------------------------------------
+  // EPIC 6: Transfer Lifecycle & Dual-Inventory Execution
+  // -------------------------------------------------------------
+  {
+    id: 'epic-6',
+    code: 'EPIC-06',
+    title: 'Transfer Lifecycle & Dual-Inventory Execution',
+    owner: 'Riya',
+    ownerRole: 'Facility Manager & Operations Lead',
+    prdSection: 'PRD §9.5, §9.6',
+    description:
+      'Deterministic transfer state machine (recommended ➔ approved ➔ dispatched ➔ received ➔ completed) with transactional dual-inventory mutations.',
+    status: 'IN_PROGRESS',
+    color: 'border-teal-200 bg-teal-50/50',
+    badgeBg: 'bg-teal-100 text-teal-800 border-teal-300',
+    iconBg: 'bg-teal-600',
+    tasks: [
+      {
+        id: 't-601',
+        code: 'TASK-06-01',
+        title: 'Transfer State Machine Implementation',
+        description:
+          'Implement finite state machine strictly enforcing: recommended -> approved -> dispatched -> received -> completed (and rejected/cancelled).',
+        assignee: 'Riya',
+        assigneeRole: 'Facility Manager',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/transfers/state_machine.go'],
+        verification: 'Rejects invalid state jumps (e.g. recommended directly to received)',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-602',
+        code: 'TASK-06-02',
+        title: 'Dual-Inventory Atomic Mutation Engine',
+        description:
+          'On dispatch, deduct quantity from donor inventory inside a DB transaction; on receipt, increment recipient inventory balance transactionally.',
+        assignee: 'Riya',
+        assigneeRole: 'Facility Manager',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/transfers/service.go'],
+        verification: 'ACID transaction test verifies both balances updated atomically',
+        category: 'Database'
+      },
+      {
+        id: 't-603',
+        code: 'TASK-06-03',
+        title: 'Chain-of-Custody & Audit Event Recording',
+        description:
+          'Record transfer_events on every transition with actor_id, timestamp, vehicle/driver notes, and append to audit.events.',
+        assignee: 'Riya',
+        assigneeRole: 'Facility Manager',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/transfers/events.go'],
+        verification: 'Audit log verifies who approved, dispatched, and received transfer',
+        category: 'Security & Auth'
+      }
+    ]
+  },
+
+  // -------------------------------------------------------------
+  // EPIC 7: Operational Work Queue & Task Management System
+  // -------------------------------------------------------------
+  {
+    id: 'epic-7',
+    code: 'EPIC-07',
+    title: 'Operational Work Queue & Task Management System',
     owner: 'Shneanjali',
     ownerRole: 'Logistics Officer & Frontend Lead',
+    prdSection: 'PRD §6, §10',
     description:
-      'Next.js App Router user interface, TanStack React Query hooks with cache invalidation, interactive work queue table with multi-criteria filtering, slide-over detail drawer, and action dialog modals.',
+      'Enterprise work item queue, SLA policies, multi-tier queue views (My, Team, Urgent, Overdue, Waiting, Completed), slide-over panel, timeline synthesis, and action dialog modals.',
     status: 'COMPLETE',
     color: 'border-purple-200 bg-purple-50/50',
     badgeBg: 'bg-purple-100 text-purple-800 border-purple-300',
     iconBg: 'bg-purple-600',
     tasks: [
       {
-        id: 't-401',
-        code: 'TASK-04-01',
-        title: 'TypeScript Domain Types & Zod Schemas',
+        id: 't-701',
+        code: 'TASK-07-01',
+        title: 'Work Item Domain Models & State Transitions',
         description:
-          'Defined strongly-typed TypeScript interfaces and Zod validation schemas matching Go backend models for WorkItem, QueueViews, Transitions, and Comments.',
+          'Constructed work item models, enums (waiting, assigned, in_progress, completed, returned), and transition state engine.',
         assignee: 'Shneanjali',
         assigneeRole: 'Logistics Officer',
         status: 'COMPLETE',
-        files: ['apps/web/src/features/work/types/work.types.ts', 'apps/web/src/features/work/schemas/work.schemas.ts'],
-        verification: 'TypeScript compiler `npm run build` succeeds with zero errors',
-        category: 'Frontend UI'
+        files: ['apps/api/internal/work/models.go', 'transitions.go'],
+        verification: '19 unit tests passing in transitions_test.go',
+        category: 'Backend Core'
       },
       {
-        id: 't-402',
-        code: 'TASK-04-02',
-        title: 'API Client & Idempotency Key Generator',
+        id: 't-702',
+        code: 'TASK-07-02',
+        title: 'Dynamic SLA Policy & Due-Date Calculation',
         description:
-          'Constructed API client wrapper attaching JWT Bearer tokens, injecting unique `Idempotency-Key` headers on mutative calls, and handling RFC-7807 errors.',
+          'Implemented SLA deadline calculation based on severity: Urgent (2h), High (6h), Normal (24h), Low (72h).',
         assignee: 'Shneanjali',
         assigneeRole: 'Logistics Officer',
         status: 'COMPLETE',
-        files: ['apps/web/src/lib/api-client.ts', 'apps/web/src/features/work/api/work-api.ts'],
-        verification: 'All frontend requests successfully communicate with API',
-        category: 'Frontend UI'
+        files: ['apps/api/internal/work/sla_policy.go'],
+        verification: 'Due date automatically computed on creation',
+        category: 'Backend Core'
       },
       {
-        id: 't-403',
-        code: 'TASK-04-03',
-        title: 'TanStack React Query Hooks & Cache Invalidation',
+        id: 't-703',
+        code: 'TASK-07-03',
+        title: 'Multi-View Queue Table & Filter Engine',
         description:
-          'Constructed declarative custom hooks (`useWorkQueue`, `useWorkItem`, `useWorkMutations`) with optimistic updates and automatic cache invalidation.',
-        assignee: 'Shneanjali',
-        assigneeRole: 'Logistics Officer',
-        status: 'COMPLETE',
-        files: [
-          'apps/web/src/features/work/hooks/useWorkQueue.ts',
-          'apps/web/src/features/work/hooks/useWorkItem.ts',
-          'apps/web/src/features/work/hooks/useWorkMutations.ts'
-        ],
-        verification: 'UI updates in real-time when actions are performed',
-        category: 'Frontend UI'
-      },
-      {
-        id: 't-404',
-        code: 'TASK-04-04',
-        title: 'Interactive Work Queue Data Table',
-        description:
-          'Built rich data table displaying Priority, Title, Facility, Assignee, SLA countdown timer, Status, and action buttons with responsive layouts.',
+          'Built WorkQueueTable with multi-criteria filtering across members, epics, priority, and real-time search.',
         assignee: 'Shneanjali',
         assigneeRole: 'Logistics Officer',
         status: 'COMPLETE',
         files: ['apps/web/src/features/work/components/WorkQueueTable.tsx'],
-        verification: 'Rendered with live data, sorted by urgency and SLA due date',
+        verification: 'Tested live in browser with search and filter responsiveness',
         category: 'Frontend UI'
       },
       {
-        id: 't-405',
-        code: 'TASK-04-05',
-        title: 'Queue View Selector Tabs',
+        id: 't-704',
+        code: 'TASK-07-04',
+        title: 'Slide-Over Work Item Inspection Drawer',
         description:
-          'Created operational tab switcher for My Work, Team Queue, Urgent Breaches, Overdue Tasks, Waiting Queue, and Completed Archive with live count badges.',
+          'Developed WorkItemPanel displaying clinical descriptions, timeline, SLA burn rate, and action triggers.',
         assignee: 'Shneanjali',
         assigneeRole: 'Logistics Officer',
         status: 'COMPLETE',
-        files: ['apps/web/src/features/work/components/WorkQueueTabs.tsx'],
-        verification: 'Clicking tabs switches queue view smoothly without page reload',
+        files: ['apps/web/src/features/work/components/WorkItemPanel.tsx'],
+        verification: 'Opens on row click with comprehensive ticket inspection',
         category: 'Frontend UI'
       },
       {
-        id: 't-406',
-        code: 'TASK-04-06',
-        title: 'Slide-over Work Item Inspection Panel',
-        description:
-          'Developed slide-over drawer panel allowing officers to inspect full ticket specifications, clinical descriptions, facility details, and trigger state transitions.',
-        assignee: 'Shneanjali',
-        assigneeRole: 'Logistics Officer',
-        status: 'COMPLETE',
-        files: ['apps/web/src/features/work/components/WorkItemPanel.tsx', 'WorkItemHeader.tsx', 'WorkItemActions.tsx'],
-        verification: 'Smoothly opens on row click with comprehensive ticket inspection',
-        category: 'Frontend UI'
-      },
-      {
-        id: 't-407',
-        code: 'TASK-04-07',
-        title: 'Chronological Audit Timeline UI Component',
-        description:
-          'Crafted visual audit timeline displaying life-cycle events (created, assigned, started, handed off, completed) with color-coded badges and actor names.',
-        assignee: 'Shneanjali',
-        assigneeRole: 'Logistics Officer',
-        status: 'COMPLETE',
-        files: ['apps/web/src/features/work/components/WorkTimeline.tsx'],
-        verification: 'Renders complete chronological audit trail per work item',
-        category: 'Frontend UI'
-      },
-      {
-        id: 't-408',
-        code: 'TASK-04-08',
-        title: 'Threaded Comments & Discussion Feed UI',
-        description:
-          'Built operational discussion component allowing facility and logistics officers to exchange live notes, reason details, and handover updates.',
-        assignee: 'Shneanjali',
-        assigneeRole: 'Logistics Officer',
-        status: 'COMPLETE',
-        files: ['apps/web/src/features/work/components/WorkComments.tsx'],
-        verification: 'Comments submitted and rendered immediately with optimistic cache',
-        category: 'Frontend UI'
-      },
-      {
-        id: 't-409',
-        code: 'TASK-04-09',
+        id: 't-705',
+        code: 'TASK-07-05',
         title: 'Operational Action Dialog Modals',
         description:
-          'Constructed accessible Radix modal dialogs for Assign, Reassign, Facility Handoff, Return with reason, and Complete with resolution summary.',
+          'Accessible modal dialogs for Assign, Reassign, Facility Handoff, Return with reason, and Complete with summary.',
         assignee: 'Shneanjali',
         assigneeRole: 'Logistics Officer',
         status: 'COMPLETE',
-        files: [
-          'AssignDialog.tsx',
-          'ReassignDialog.tsx',
-          'HandoffDialog.tsx',
-          'ReturnDialog.tsx',
-          'CompleteDialog.tsx'
-        ],
+        files: ['AssignDialog.tsx', 'HandoffDialog.tsx', 'ReturnDialog.tsx', 'CompleteDialog.tsx'],
         verification: 'All modal dialogs validate inputs and trigger API mutations cleanly',
         category: 'Frontend UI'
-      },
-      {
-        id: 't-410',
-        code: 'TASK-04-10',
-        title: 'Accessible UI Primitive Library & Healthcare Theme',
-        description:
-          'Configured Tailwind CSS healthcare color scheme (Teal/Emerald/Slate) and standard Radix UI accessible primitives (Dialog, Tabs, Sheet, ScrollArea, Tooltip).',
-        assignee: 'Shneanjali',
-        assigneeRole: 'Logistics Officer',
-        status: 'COMPLETE',
-        files: ['apps/web/src/components/ui/*', 'tailwind.config.ts', 'globals.css'],
-        verification: 'Clean visual hierarchy and keyboard accessible components',
-        category: 'Frontend UI'
       }
     ]
   },
+
+  // -------------------------------------------------------------
+  // EPIC 8: Executive Dashboard & Leaflet Geographic Risk Map
+  // -------------------------------------------------------------
   {
-    id: 'epic-5',
-    code: 'EPIC-05',
-    title: 'System Integration, Work Generator & Seed Data',
-    owner: 'Sarthak',
-    ownerRole: 'Team Leader & Lead Architect',
+    id: 'epic-8',
+    code: 'EPIC-08',
+    title: 'Executive Dashboard & Leaflet Geographic Risk Map',
+    owner: 'Shneanjali',
+    ownerRole: 'Logistics Officer & Frontend Lead',
+    prdSection: 'PRD §10',
     description:
-      'Automated Work Item Generator reacting to clinical and supply chain triggers, active ticket deduplication guard, Odisha health network seed dataset, RBAC permission verification, and Next.js reverse proxy integration.',
-    status: 'COMPLETE',
-    color: 'border-emerald-200 bg-emerald-50/50',
-    badgeBg: 'bg-emerald-100 text-emerald-800 border-emerald-300',
-    iconBg: 'bg-emerald-600',
-    tasks: [
-      {
-        id: 't-501',
-        code: 'TASK-05-01',
-        title: 'Automated Work Item Generator Engine',
-        description:
-          'Built autonomous generator module that receives system events (Risk alerts, stock shortages, cold-chain breaches) and spawns structured work items.',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/generator.go'],
-        verification: 'Creates work items with automated priority and SLA calculation',
-        category: 'Integration & Seed'
-      },
-      {
-        id: 't-502',
-        code: 'TASK-05-02',
-        title: 'Active Ticket Deduplication Guard',
-        description:
-          'Constructed deduplication query guard preventing multiple open tickets for the same underlying entity (e.g. same medicine batch stockout at the same PHC).',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/postgres_repository.go', 'generator.go'],
-        verification: 'Duplicate alert triggers return existing active item without duplication',
-        category: 'Integration & Seed'
-      },
-      {
-        id: 't-503',
-        code: 'TASK-05-03',
-        title: 'Dynamic Priority & SLA Severity Classifier',
-        description:
-          'Mapped domain urgency parameters (patient critical status, expired vaccine batch, blood shortage) to appropriate priority tiers and escalation policies.',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/sla_policy.go'],
-        verification: 'High risk stockouts mapped to 2-hour Urgent SLA automatically',
-        category: 'Integration & Seed'
-      },
-      {
-        id: 't-504',
-        code: 'TASK-05-04',
-        title: 'Odisha Healthcare Realistic Seed Dataset',
-        description:
-          'Populated realistic database records representing Odisha facilities (Bhubaneswar Capital Hospital, Khurda DHH, Jatni CHC, Pipili PHC), users, and 12 tickets.',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['scripts/seed/seed_work_items.sql'],
-        verification: 'Database seeded with real-world clinical & logistics records',
-        category: 'Integration & Seed'
-      },
-      {
-        id: 't-505',
-        code: 'TASK-05-05',
-        title: 'Role-Based Access Control (RBAC) Enforcement',
-        description:
-          'Implemented permission validator enforcing cross-facility boundaries (Facility Managers restricted to their facility, District Officers managing district, State/National Admins global).',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['apps/api/internal/work/permissions.go'],
-        verification: 'Unauthorized cross-facility actions rejected with 403 Forbidden',
-        category: 'Security & Auth'
-      },
-      {
-        id: 't-506',
-        code: 'TASK-05-06',
-        title: 'End-to-End Chi API Mounting & Server Wiring',
-        description:
-          'Integrated work service, repository, middleware, and handlers into the main Chi router instance with graceful shutdown and health check endpoints.',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['apps/api/cmd/server/main.go'],
-        verification: 'GET /health/live and /api/v1/work/queue return valid status',
-        category: 'Integration & Seed'
-      },
-      {
-        id: 't-507',
-        code: 'TASK-05-07',
-        title: 'Next.js API Reverse Proxy Configuration',
-        description:
-          'Configured Next.js rewrites in `next.config.mjs` forwarding browser `/api/:path*` requests directly to Go backend on port 8085 with CORS elimination.',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['apps/web/next.config.mjs'],
-        verification: 'Browser queries to http://localhost:3000/api proxy seamlessly to :8085',
-        category: 'Frontend UI'
-      }
-    ]
-  },
-  {
-    id: 'epic-6',
-    code: 'EPIC-06',
-    title: 'Operational Collaboration & AI Resource Copilot Chat',
-    owner: 'Sarthak',
-    ownerRole: 'Lead Architect & Agent Team',
-    description:
-      'Role-scoped healthcare channels (Facility, District, Transfer context), interactive stockout/transfer cards, and ArogyaGrid AI Resource Copilot with deterministic PRD tool calling.',
+      'High-level executive KPI summary cards, interactive Leaflet / OpenStreetMap visualization of Odisha healthcare network, color-coded facility risk markers, and facility detail drilldowns.',
     status: 'IN_PROGRESS',
     color: 'border-cyan-200 bg-cyan-50/50',
     badgeBg: 'bg-cyan-100 text-cyan-800 border-cyan-300',
     iconBg: 'bg-cyan-600',
     tasks: [
       {
-        id: 't-601',
-        code: 'TASK-CHAT-01',
+        id: 't-801',
+        code: 'TASK-08-01',
+        title: 'Executive Network KPI Summary Cards',
+        description:
+          'Build GET /dashboard/summary endpoint returning Active Facilities, Critical Stockouts, Bed Capacity Stress, and Active Transfers.',
+        assignee: 'Shneanjali',
+        assigneeRole: 'Logistics Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/dashboard/summary.go'],
+        verification: 'Summary endpoint responds with accurate live metrics',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-802',
+        code: 'TASK-08-02',
+        title: 'Leaflet / OpenStreetMap Geographic Risk Map',
+        description:
+          'Implement interactive map component rendering facility pins color-coded by risk: Red (Critical Stockout/Bed Stress), Orange (High Risk), Green (Safe Surplus Donor).',
+        assignee: 'Shneanjali',
+        assigneeRole: 'Logistics Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/web/src/features/dashboard/components/FacilityMap.tsx'],
+        verification: 'Map renders Odisha PHC coordinates with popup risk cards',
+        category: 'Frontend UI'
+      },
+      {
+        id: 't-803',
+        code: 'TASK-08-03',
+        title: 'Facility 360 Drilldown Page',
+        description:
+          'Build dedicated facility view displaying inventory balances, capacity snapshot, consumption charts, risk history, and transfer records.',
+        assignee: 'Shneanjali',
+        assigneeRole: 'Logistics Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/web/src/app/facilities/[id]/page.tsx'],
+        verification: 'Page renders comprehensive single-facility operational view',
+        category: 'Frontend UI'
+      }
+    ]
+  },
+
+  // -------------------------------------------------------------
+  // EPIC 9: Operational Collaboration & AI Resource Copilot Chat
+  // -------------------------------------------------------------
+  {
+    id: 'epic-9',
+    code: 'EPIC-09',
+    title: 'Operational Collaboration & AI Resource Copilot Chat',
+    owner: 'Sarthak',
+    ownerRole: 'Team Leader & System Architect',
+    prdSection: 'PRD Chat & §23',
+    description:
+      'Role-scoped healthcare channels (Facility, District, Transfer context), interactive stockout/transfer cards, and ArogyaGrid AI Resource Copilot with deterministic PRD tool calling.',
+    status: 'IN_PROGRESS',
+    color: 'border-pink-200 bg-pink-50/50',
+    badgeBg: 'bg-pink-100 text-pink-800 border-pink-300',
+    iconBg: 'bg-pink-600',
+    tasks: [
+      {
+        id: 't-901',
+        code: 'TASK-09-01',
         title: 'PostgreSQL chat Schema & Tables Migration',
-        description: 'Create chat.channels, chat.channel_members, chat.messages tables with indexes in 002_chat_schema.sql.',
+        description:
+          'Create chat.channels, chat.channel_members, chat.messages tables with indexes in 002_chat_schema.sql.',
         assignee: 'Sarthak',
         assigneeRole: 'Team Leader',
         status: 'COMPLETE',
@@ -713,46 +656,11 @@ export const EPICS_DATA: EpicItem[] = [
         category: 'Database'
       },
       {
-        id: 't-602',
-        code: 'TASK-CHAT-02',
-        title: 'Seed Initial Chat Channels & Operational History',
-        description: 'Populate default channels (#khurda-district-emergency, #pipili-phc, #arogyagrid-copilot) with seed messages.',
-        assignee: 'Sarthak',
-        assigneeRole: 'Team Leader',
-        status: 'COMPLETE',
-        files: ['scripts/seed/seed_chat.sql'],
-        verification: 'Seed data specification defined in task/TASKS.md',
-        category: 'Database'
-      },
-      {
-        id: 't-603',
-        code: 'TASK-CHAT-03',
-        title: 'Go Domain Models, DTOs & Custom Errors',
-        description: 'Define Channel, Message, ChannelMember structs, DTOs, and typed domain errors in internal/chat.',
-        assignee: 'Vaishnavi',
-        assigneeRole: 'District Officer',
-        status: 'IN_PROGRESS',
-        files: ['apps/api/internal/chat/models.go', 'apps/api/internal/chat/dto.go'],
-        verification: 'Compiles cleanly with go build',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-604',
-        code: 'TASK-CHAT-04',
-        title: 'PostgreSQL pgx Repository Implementation',
-        description: 'Implement Channel and Message persistence, query pagination, and member validation via pgxpool.',
-        assignee: 'Vaishnavi',
-        assigneeRole: 'District Officer',
-        status: 'IN_PROGRESS',
-        files: ['apps/api/internal/chat/postgres_repository.go'],
-        verification: 'Queries tested against PostgreSQL chat schema',
-        category: 'Database'
-      },
-      {
-        id: 't-605',
-        code: 'TASK-CHAT-05',
+        id: 't-902',
+        code: 'TASK-09-02',
         title: 'Real-Time WebSocket Connection Hub & SSE Fallback',
-        description: 'Concurrent-safe connection manager supporting channel broadcast, user broadcast, and auto cleanup.',
+        description:
+          'Concurrent-safe connection manager supporting channel broadcast, user broadcast, and auto cleanup.',
         assignee: 'Riya',
         assigneeRole: 'Facility Manager',
         status: 'IN_PROGRESS',
@@ -761,111 +669,88 @@ export const EPICS_DATA: EpicItem[] = [
         category: 'Backend Core'
       },
       {
-        id: 't-606',
-        code: 'TASK-CHAT-06',
-        title: 'Chat Application Service Layer & RBAC Rules',
-        description: 'Coordinates message creation, content sanitization, permission validation, and copilot dispatch.',
-        assignee: 'Riya',
-        assigneeRole: 'Facility Manager',
-        status: 'IN_PROGRESS',
-        files: ['apps/api/internal/chat/service.go'],
-        verification: 'Unauthorized cross-facility chat rejected with 403',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-607',
-        code: 'TASK-CHAT-07',
-        title: 'RESTful Chi HTTP Handlers & WebSocket Route',
-        description: 'Mounts /api/v1/chat/* routes for channels, messages, history, read status, and WebSocket upgrader.',
-        assignee: 'Vaishnavi',
-        assigneeRole: 'District Officer',
-        status: 'IN_PROGRESS',
-        files: ['apps/api/internal/chat/handler.go'],
-        verification: 'Chi router mounts /api/v1/chat cleanly',
-        category: 'Backend Core'
-      },
-      {
-        id: 't-608',
-        code: 'TASK-CHAT-08',
+        id: 't-903',
+        code: 'TASK-09-03',
         title: 'Deterministic Domain Tools for AI Copilot',
-        description: 'Builds PRD-compliant tools querying inventory balances, days of cover, capacity, and safe surplus.',
+        description:
+          'Builds PRD-compliant tools querying inventory balances, days of cover, capacity, and safe surplus without hallucinations.',
         assignee: 'Sarthak',
         assigneeRole: 'Team Leader',
         status: 'IN_PROGRESS',
         files: ['apps/api/internal/chat/copilot_tools.go'],
-        verification: 'Tool returns exact stock without simulation',
+        verification: 'Tool returns exact stock matching PostgreSQL database',
         category: 'Integration & Seed'
       },
       {
-        id: 't-609',
-        code: 'TASK-CHAT-09',
-        title: 'ArogyaGrid Copilot NLP Intent Processor',
-        description: 'Classifies natural language questions, extracts parameters, and formats explainable markdown answers.',
+        id: 't-904',
+        code: 'TASK-09-04',
+        title: 'Interactive Chat UI, Channel Sidebar & Message Feed',
+        description:
+          'Next.js components: ChannelList, MessageFeed with role badges, MessageComposer, and Copilot quick chips.',
+        assignee: 'Shneanjali',
+        assigneeRole: 'Logistics Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/web/src/features/chat/components/MessageFeed.tsx'],
+        verification: 'Responsive chat interface renders at /chat route',
+        category: 'Frontend UI'
+      }
+    ]
+  },
+
+  // -------------------------------------------------------------
+  // EPIC 10: Automated Background Scheduler & Realistic Demo Dataset
+  // -------------------------------------------------------------
+  {
+    id: 'epic-10',
+    code: 'EPIC-10',
+    title: 'Automated Background Scheduler & Realistic Demo Dataset',
+    owner: 'Sarthak',
+    ownerRole: 'Team Leader & System Architect',
+    prdSection: 'PRD §18, §21',
+    description:
+      'In-process robfig/cron scheduler running daily demand aggregations, forecast refreshes, and stale recommendation cleanups, with realistic 15-facility Odisha demo dataset.',
+    status: 'IN_PROGRESS',
+    color: 'border-yellow-200 bg-yellow-50/50',
+    badgeBg: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+    iconBg: 'bg-yellow-600',
+    tasks: [
+      {
+        id: 't-1001',
+        code: 'TASK-10-01',
+        title: 'robfig/cron In-Process Background Scheduler',
+        description:
+          'Configure Go background scheduler in cmd/server/main.go executing periodic jobs with graceful cancellation.',
         assignee: 'Sarthak',
         assigneeRole: 'Team Leader',
         status: 'IN_PROGRESS',
-        files: ['apps/api/internal/chat/copilot.go'],
-        verification: 'NLP correctly parses stock, risk, and bed capacity questions',
-        category: 'Integration & Seed'
-      },
-      {
-        id: 't-610',
-        code: 'TASK-CHAT-10',
-        title: 'Frontend TypeScript Types, API Client & Query Hooks',
-        description: 'Strongly typed contracts, chat API client with JWT headers, and TanStack useChat query hooks.',
-        assignee: 'Shneanjali',
-        assigneeRole: 'Logistics Officer',
-        status: 'IN_PROGRESS',
-        files: ['apps/web/src/features/chat/types/chat.types.ts', 'hooks/useChat.ts'],
-        verification: 'npm run build compiles types with 0 errors',
-        category: 'Frontend UI'
-      },
-      {
-        id: 't-611',
-        code: 'TASK-CHAT-11',
-        title: 'Interactive Chat UI, Channel Sidebar & Message Feed',
-        description: 'Next.js components: ChannelList, MessageFeed with role badges, MessageComposer, and Copilot quick chips.',
-        assignee: 'Shneanjali',
-        assigneeRole: 'Logistics Officer',
-        status: 'IN_PROGRESS',
-        files: ['apps/web/src/features/chat/components/MessageFeed.tsx', 'ChannelList.tsx'],
-        verification: 'Responsive chat interface renders in browser',
-        category: 'Frontend UI'
-      },
-      {
-        id: 't-612',
-        code: 'TASK-CHAT-12',
-        title: 'Interactive Action Cards for Stockout Alerts & Transfers',
-        description: 'Rich message cards for Stockout Alerts and Transfer Recommendations with 1-click action buttons.',
-        assignee: 'Shneanjali',
-        assigneeRole: 'Logistics Officer',
-        status: 'IN_PROGRESS',
-        files: ['apps/web/src/features/chat/components/InteractiveCards.tsx'],
-        verification: 'Cards render inline in chat stream with action triggers',
-        category: 'Frontend UI'
-      },
-      {
-        id: 't-613',
-        code: 'TASK-CHAT-13',
-        title: 'Backend Automated Unit & Integration Tests',
-        description: 'Unit test suite for chat service, permission validation, and copilot safe-surplus tool calculation.',
-        assignee: 'Vaishnavi',
-        assigneeRole: 'District Officer',
-        status: 'IN_PROGRESS',
-        files: ['apps/api/internal/chat/service_test.go', 'copilot_test.go'],
-        verification: 'go test -v ./internal/chat/... outputs PASS',
+        files: ['apps/api/internal/scheduler/cron.go'],
+        verification: 'Scheduler boots cleanly with server and runs test tick',
         category: 'Backend Core'
       },
       {
-        id: 't-614',
-        code: 'TASK-CHAT-14',
-        title: 'Automated End-to-End Smoke Verification Script',
-        description: 'Bash automation script testing authentication, channel listing, message delivery, and copilot response.',
+        id: 't-1002',
+        code: 'TASK-10-02',
+        title: 'Automated Demand, Forecast & Risk Refresh Jobs',
+        description:
+          'Automate midnight demand aggregation, forecast horizon projection, and risk alert recalculation.',
         assignee: 'Sarthak',
         assigneeRole: 'Team Leader',
         status: 'IN_PROGRESS',
-        files: ['scripts/test_chat_e2e.sh'],
-        verification: 'Smoke script runs to completion with exit code 0',
+        files: ['apps/api/internal/scheduler/jobs.go'],
+        verification: 'Job triggers demand aggregation and refreshes risk queue',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-1003',
+        code: 'TASK-10-03',
+        title: 'Comprehensive Odisha 15-Facility Realistic Seed Dataset',
+        description:
+          'Realistic database records representing 15 facilities (Bhubaneswar, Khurda, Jatni, Pipili), 30 medicines, and 60-day consumption trends.',
+        assignee: 'Sarthak',
+        assigneeRole: 'Team Leader',
+        status: 'IN_PROGRESS',
+        files: ['scripts/seed/seed_full_demo.sql'],
+        verification: '5–7 minute judging storyboard executes cleanly from seed data',
         category: 'Integration & Seed'
       }
     ]
@@ -875,16 +760,21 @@ export const EPICS_DATA: EpicItem[] = [
 export const TEAM_ROSTER = [
   {
     name: 'Sarthak',
-    role: 'Team Leader & Lead Architect',
+    role: 'Team Leader & System Architect',
     systemRole: 'National Administrator',
     avatar: '👑',
     color: 'from-rose-500 to-red-600',
     borderColor: 'border-rose-200',
     bgBadge: 'bg-rose-50 text-rose-800 border-rose-200',
-    epics: ['EPIC-01', 'EPIC-05'],
-    epicTitles: ['Foundation, Auth & Database Infrastructure', 'System Integration, Work Generator & Seed Data'],
+    epics: ['EPIC-01', 'EPIC-04', 'EPIC-09', 'EPIC-10'],
+    epicTitles: [
+      'Foundation, Auth & Database Infrastructure',
+      'Demand Aggregation, Forecasting & Shortage Risk Engine',
+      'Operational Collaboration & AI Resource Copilot Chat',
+      'Automated Background Scheduler & Realistic Demo Dataset'
+    ],
     summary:
-      'Architected multi-schema PostgreSQL foundation, JWT authentication, transaction idempotency, work item generator, deduplication engine, and end-to-end service orchestration.'
+      'Architects multi-schema PostgreSQL foundation, JWT authentication, short-term demand forecasting, AI Copilot query engine, background cron scheduler, and system orchestration.'
   },
   {
     name: 'Vaishnavi',
@@ -894,23 +784,29 @@ export const TEAM_ROSTER = [
     color: 'from-amber-500 to-yellow-600',
     borderColor: 'border-amber-200',
     bgBadge: 'bg-amber-50 text-amber-800 border-amber-200',
-    epics: ['EPIC-02'],
-    epicTitles: ['Work Item Core Backend & State Machine'],
+    epics: ['EPIC-02', 'EPIC-05'],
+    epicTitles: [
+      'Medicine Catalog & Operational Inventory Ledger',
+      'Safe Surplus Redistribution & Scoring Engine'
+    ],
     summary:
-      'Engineered work item domain models, deterministic finite state machine, PostgreSQL repository pattern via pgx v5, Chi HTTP routes, request validation, and 19 unit test suites.'
+      'Engineers medicine master catalog, immutable inventory transaction ledger, negative stock invariant, safe surplus formula, and multi-factor donor ranking algorithm.'
   },
   {
     name: 'Riya',
-    role: 'Facility Manager & Transitions Lead',
+    role: 'Facility Manager & Operations Lead',
     systemRole: 'Facility Manager (Capital Hospital)',
     avatar: '🏥',
     color: 'from-blue-500 to-cyan-600',
     borderColor: 'border-blue-200',
     bgBadge: 'bg-blue-50 text-blue-800 border-blue-200',
-    epics: ['EPIC-03'],
-    epicTitles: ['Transitions, Queues & SLA Engine'],
+    epics: ['EPIC-03', 'EPIC-06'],
+    epicTitles: [
+      'Bed & Workforce Capacity Monitoring',
+      'Transfer Lifecycle & Dual-Inventory Execution'
+    ],
     summary:
-      'Engineered complete transition workflow (assign, accept, reassign, return, complete, handoff), dynamic SLA policy engine, unified chronological audit timeline synthesis, and discussion comments.'
+      'Engineers time-series bed occupancy snapshots, capacity stress alerts, transfer state machine (recommended -> approved -> dispatched -> received), and atomic dual-inventory updates.'
   },
   {
     name: 'Shneanjali',
@@ -920,10 +816,13 @@ export const TEAM_ROSTER = [
     color: 'from-purple-500 to-indigo-600',
     borderColor: 'border-purple-200',
     bgBadge: 'bg-purple-50 text-purple-800 border-purple-200',
-    epics: ['EPIC-04'],
-    epicTitles: ['Frontend Work System & Interactive UI'],
+    epics: ['EPIC-07', 'EPIC-08'],
+    epicTitles: [
+      'Operational Work Queue & Task Management System',
+      'Executive Dashboard & Leaflet Geographic Risk Map'
+    ],
     summary:
-      'Developed Next.js App Router user interface, TanStack React Query hooks with optimistic updates, interactive operational work queue table, slide-over detail drawer, and action dialog modals.'
+      'Develops Next.js operational work queue, slide-over detail drawer, action dialog modals, executive KPI summary cards, and interactive Leaflet / OSM geographic facility risk map.'
   }
 ];
 
@@ -978,6 +877,7 @@ export function EpicsBoardPage() {
   const completedTasks = allTasks.filter((t) => t.status === 'COMPLETE').length;
   const inProgressTasks = allTasks.filter((t) => t.status === 'IN_PROGRESS').length;
   const backlogTasks = allTasks.filter((t) => t.status === 'BACKLOG').length;
+  const completedEpics = EPICS_DATA.filter((e) => e.status === 'COMPLETE').length;
   const completionPercentage = Math.round((completedTasks / totalTasks) * 100);
 
   return (
@@ -989,17 +889,18 @@ export function EpicsBoardPage() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-semibold mb-3">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Production Implementation Verification</span>
+                <span>BRICS Smart Health PRD Specification • 10 Epics Architecture</span>
               </div>
               <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-                Team Epics & Task Architecture Board
+                ArogyaGrid PRD 10-Epics Architecture Board
               </h1>
               <p className="text-slate-300 text-sm sm:text-base max-w-3xl mt-2 leading-relaxed">
-                Complete engineering breakdown of all 5 Core Epics and 42 Itemized Tasks completed across our 4 team members:
+                Complete engineering breakdown of all <strong className="text-white font-bold">10 PRD Epics</strong> and{' '}
+                <strong className="text-white font-bold">{totalTasks} Itemized Tasks</strong> distributed across our 4 team members:
                 <strong className="text-white font-semibold"> Sarthak</strong> (Lead),
-                <strong className="text-white font-semibold"> Vaishnavi</strong>,
-                <strong className="text-white font-semibold"> Riya</strong>, and
-                <strong className="text-white font-semibold"> Shneanjali</strong>.
+                <strong className="text-white font-semibold"> Vaishnavi</strong> (District),
+                <strong className="text-white font-semibold"> Riya</strong> (Facility), and
+                <strong className="text-white font-semibold"> Shneanjali</strong> (Logistics).
               </p>
             </div>
 
@@ -1009,7 +910,7 @@ export function EpicsBoardPage() {
                 href="/work"
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-sm shadow-md transition-all hover:scale-105"
               >
-                <span>Switch to Operational Work Queue</span>
+                <span>Operational Work Queue</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
 
@@ -1029,18 +930,26 @@ export function EpicsBoardPage() {
           {/* Metric Badges Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-4 border-t border-slate-700/60">
             <div className="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5">
-              <span className="text-xs text-slate-400 block font-medium">Overall Progress</span>
+              <span className="text-xs text-slate-400 block font-medium">Total PRD Epics</span>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-black text-emerald-400">{completionPercentage}%</span>
-                <span className="text-[11px] text-emerald-300 font-semibold">ALL COMPLETE</span>
+                <span className="text-2xl font-black text-white">{EPICS_DATA.length}</span>
+                <span className="text-[11px] text-teal-300 font-semibold">Full PRD Scope</span>
               </div>
             </div>
 
             <div className="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5">
-              <span className="text-xs text-slate-400 block font-medium">Total Epics</span>
+              <span className="text-xs text-slate-400 block font-medium">Completed Epics</span>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-black text-white">{EPICS_DATA.length}</span>
-                <span className="text-[11px] text-teal-300 font-semibold">5 Done • 1 Active</span>
+                <span className="text-2xl font-black text-emerald-400">{completedEpics} / {EPICS_DATA.length}</span>
+                <span className="text-[11px] text-emerald-300 font-semibold">Verified Live</span>
+              </div>
+            </div>
+
+            <div className="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5">
+              <span className="text-xs text-slate-400 block font-medium">Active / Roadmap</span>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-2xl font-black text-amber-400">{EPICS_DATA.length - completedEpics}</span>
+                <span className="text-[11px] text-amber-300 font-semibold">In Progress</span>
               </div>
             </div>
 
@@ -1048,31 +957,23 @@ export function EpicsBoardPage() {
               <span className="text-xs text-slate-400 block font-medium">Itemized Tasks</span>
               <div className="flex items-baseline gap-2 mt-1">
                 <span className="text-2xl font-black text-white">{totalTasks}</span>
-                <span className="text-[11px] text-slate-300 font-semibold">{completedTasks} Done ({inProgressTasks} Active)</span>
+                <span className="text-[11px] text-slate-300 font-semibold">{completedTasks} Done</span>
               </div>
             </div>
 
             <div className="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5">
-              <span className="text-xs text-slate-400 block font-medium">Unit Tests Pass</span>
+              <span className="text-xs text-slate-400 block font-medium">Go Unit Tests</span>
               <div className="flex items-baseline gap-2 mt-1">
                 <span className="text-2xl font-black text-emerald-400">19 / 19</span>
-                <span className="text-[11px] text-emerald-300 font-semibold">100% OK</span>
+                <span className="text-[11px] text-emerald-300 font-semibold">100% Passing</span>
               </div>
             </div>
 
             <div className="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5">
-              <span className="text-xs text-slate-400 block font-medium">Database Schemas</span>
+              <span className="text-xs text-slate-400 block font-medium">Core Schemas</span>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-black text-cyan-300">5</span>
-                <span className="text-[11px] text-cyan-200 font-semibold">iam/core/work/audit/chat</span>
-              </div>
-            </div>
-
-            <div className="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5">
-              <span className="text-xs text-slate-400 block font-medium">Team Officers</span>
-              <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-black text-purple-300">4</span>
-                <span className="text-[11px] text-purple-200 font-semibold">Allocated</span>
+                <span className="text-2xl font-black text-cyan-300">6</span>
+                <span className="text-[11px] text-cyan-200 font-semibold">iam/core/inv/cap/work</span>
               </div>
             </div>
           </div>
@@ -1107,7 +1008,7 @@ export function EpicsBoardPage() {
                 }`}
               >
                 <Users className="w-4 h-4 text-indigo-600" />
-                <span>Group by Member (4)</span>
+                <span>Group by Member ({TEAM_ROSTER.length})</span>
               </button>
 
               <button
@@ -1158,19 +1059,7 @@ export function EpicsBoardPage() {
                 }`}
               >
                 <Clock className="w-3.5 h-3.5" />
-                <span>In Progress ({inProgressTasks})</span>
-              </button>
-
-              <button
-                onClick={() => setStatusFilter('BACKLOG')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 ${
-                  statusFilter === 'BACKLOG'
-                    ? 'bg-slate-700 text-white border-slate-700 shadow-sm'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border-slate-200'
-                }`}
-              >
-                <CircleDashed className="w-3.5 h-3.5" />
-                <span>Backlog ({backlogTasks})</span>
+                <span>Active ({inProgressTasks})</span>
               </button>
             </div>
           </div>
@@ -1181,7 +1070,7 @@ export function EpicsBoardPage() {
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by task title, code (e.g. TASK-02-02), member (Sarthak, Vaishnavi...), code file, or keyword..."
+              placeholder="Search across all 10 Epics by keyword (e.g. Inventory, Safe Surplus, Forecast, Bed, Chat, Sarthak, TASK-04-02)..."
               className="pl-10 h-10 bg-slate-50 border-slate-200 text-sm"
             />
             {searchQuery && (
@@ -1196,7 +1085,7 @@ export function EpicsBoardPage() {
         </section>
 
         {/* =================================================================== */}
-        {/* VIEW MODE 1: GROUP BY EPIC (5 EPICS) */}
+        {/* VIEW MODE 1: GROUP BY EPIC (ALL 10 EPICS) */}
         {/* =================================================================== */}
         {viewMode === 'by-epic' && (
           <div className="space-y-8">
@@ -1211,6 +1100,8 @@ export function EpicsBoardPage() {
                     t.description.toLowerCase().includes(q) ||
                     t.assignee.toLowerCase().includes(q) ||
                     t.category.toLowerCase().includes(q) ||
+                    epic.code.toLowerCase().includes(q) ||
+                    epic.title.toLowerCase().includes(q) ||
                     t.files.some((f) => f.toLowerCase().includes(q))
                   );
                 }
@@ -1236,13 +1127,24 @@ export function EpicsBoardPage() {
                             {epic.code}
                           </span>
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-extrabold border flex items-center gap-1.5 ${epic.badgeBg}`}
+                            className={`px-3 py-1 rounded-full text-xs font-extrabold border flex items-center gap-1.5 ${
+                              isComplete
+                                ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                : 'bg-amber-100 text-amber-800 border-amber-300'
+                            }`}
                           >
-                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            {isComplete ? (
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            ) : (
+                              <Clock className="w-3.5 h-3.5 text-amber-600" />
+                            )}
                             <span>{epic.status}</span>
                           </span>
+                          <span className="text-xs text-teal-700 bg-teal-50 px-2 py-0.5 rounded border border-teal-200 font-semibold">
+                            {epic.prdSection}
+                          </span>
                           <span className="text-xs text-slate-500 font-medium">
-                            {epic.tasks.length} itemized subtasks
+                            {epic.tasks.length} itemized tasks
                           </span>
                         </div>
 
@@ -1261,9 +1163,7 @@ export function EpicsBoardPage() {
                           {epic.owner === 'Sarthak' ? '👑' : epic.owner === 'Vaishnavi' ? '📋' : epic.owner === 'Riya' ? '🏥' : '🚚'}
                         </div>
                         <div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">Lead Owner</span>
-                          </div>
+                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Lead Owner</span>
                           <span className="font-bold text-slate-900 text-sm block">
                             {epic.owner}
                           </span>
@@ -1278,12 +1178,14 @@ export function EpicsBoardPage() {
                     <div className="mt-5 pt-4 border-t border-slate-100 flex items-center gap-4">
                       <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                         <div
-                          className="bg-emerald-500 h-2.5 rounded-full transition-all duration-500"
+                          className={`h-2.5 rounded-full transition-all duration-500 ${
+                            isComplete ? 'bg-emerald-500' : 'bg-amber-500'
+                          }`}
                           style={{ width: `${progressRatio}%` }}
                         ></div>
                       </div>
-                      <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">
-                        {progressRatio}% Complete ({epic.tasks.filter((t) => t.status === 'COMPLETE').length}/{epic.tasks.length})
+                      <span className="text-xs font-bold text-slate-700 whitespace-nowrap">
+                        {progressRatio}% ({epic.tasks.filter((t) => t.status === 'COMPLETE').length}/{epic.tasks.length} Tasks)
                       </span>
                     </div>
                   </div>
@@ -1327,10 +1229,8 @@ export function EpicsBoardPage() {
                                 >
                                   {task.status === 'COMPLETE' ? (
                                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                                  ) : task.status === 'IN_PROGRESS' ? (
-                                    <Clock className="w-3.5 h-3.5 text-amber-600" />
                                   ) : (
-                                    <CircleDashed className="w-3.5 h-3.5 text-slate-500" />
+                                    <Clock className="w-3.5 h-3.5 text-amber-600" />
                                   )}
                                   <span>{task.status}</span>
                                 </span>
@@ -1394,7 +1294,7 @@ export function EpicsBoardPage() {
             {TEAM_ROSTER.map((member) => {
               const memberTasks = allTasks.filter((t) => t.assignee === member.name);
               const completedCount = memberTasks.filter((t) => t.status === 'COMPLETE').length;
-              const ratio = Math.round((completedCount / memberTasks.length) * 100);
+              const ratio = memberTasks.length > 0 ? Math.round((completedCount / memberTasks.length) * 100) : 0;
 
               return (
                 <div
@@ -1430,7 +1330,7 @@ export function EpicsBoardPage() {
                       {/* Assigned Epics */}
                       <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap gap-1.5 items-center">
                         <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">
-                          Assigned Epics:
+                          Assigned Epics ({member.epics.length}):
                         </span>
                         {member.epics.map((code) => (
                           <span
@@ -1452,7 +1352,7 @@ export function EpicsBoardPage() {
                         </div>
                         <div className="flex justify-between text-[11px] font-semibold text-slate-500 mt-1.5">
                           <span>Progress: {ratio}%</span>
-                          <span className="text-emerald-600">✓ Fully Verified</span>
+                          <span className="text-emerald-600">✓ In Active Build</span>
                         </div>
                       </div>
                     </div>
@@ -1460,7 +1360,7 @@ export function EpicsBoardPage() {
                     {/* Task Checklist for this member */}
                     <div className="p-6 space-y-3">
                       <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                        Itemized Completed Tasks ({memberTasks.length}):
+                        Itemized Tasks Assigned ({memberTasks.length}):
                       </h3>
 
                       <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1">
@@ -1479,8 +1379,14 @@ export function EpicsBoardPage() {
                                 {t.description}
                               </p>
                             </div>
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 shrink-0">
-                              ✓ Done
+                            <span
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded shrink-0 ${
+                                t.status === 'COMPLETE'
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : 'bg-amber-100 text-amber-800'
+                              }`}
+                            >
+                              {t.status === 'COMPLETE' ? '✓ Done' : '⚡ Active'}
                             </span>
                           </div>
                         ))}
@@ -1501,22 +1407,22 @@ export function EpicsBoardPage() {
         )}
 
         {/* =================================================================== */}
-        {/* VIEW MODE 3: ALL TASKS MATRIX (42 ITEM AUDIT) */}
+        {/* VIEW MODE 3: ALL TASKS MATRIX (10 EPICS AUDIT) */}
         {/* =================================================================== */}
         {viewMode === 'matrix' && (
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="p-5 border-b border-slate-100 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-slate-900">
-                  Unified Tasks Audit Matrix ({filteredTasks.length} Tasks)
+                  Full 10-Epics Tasks Audit Matrix ({filteredTasks.length} Tasks)
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Complete list of all deliverables, files, verification tests, and team assignments.
+                  Complete list of all deliverables, files, verification tests, and team assignments across all 10 PRD Epics.
                 </p>
               </div>
 
-              <span className="text-xs font-bold px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
-                100% Architecture Verification
+              <span className="text-xs font-bold px-2.5 py-1 rounded bg-teal-100 text-teal-800 border border-teal-300">
+                100% PRD Coverage Matrix
               </span>
             </div>
 
@@ -1560,8 +1466,14 @@ export function EpicsBoardPage() {
                         </span>
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[11px] flex items-center gap-1 w-fit">
-                          <Check className="w-3 h-3 text-emerald-600" />
+                        <span
+                          className={`px-2 py-0.5 rounded-full font-bold text-[11px] flex items-center gap-1 w-fit ${
+                            t.status === 'COMPLETE'
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : 'bg-amber-100 text-amber-800'
+                          }`}
+                        >
+                          {t.status === 'COMPLETE' ? <Check className="w-3 h-3 text-emerald-600" /> : <Clock className="w-3 h-3 text-amber-600" />}
                           <span>{t.status}</span>
                         </span>
                       </td>
@@ -1580,7 +1492,7 @@ export function EpicsBoardPage() {
         <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-2xl p-6 border border-teal-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-1">
             <h3 className="font-bold text-teal-950 text-base">
-              Ready to see these Epics running live with operational tickets?
+              Ready to see the operational work items running live?
             </h3>
             <p className="text-xs text-teal-800">
               The operational work queue demonstrates this architecture running against real-world Odisha PHC emergency alerts.

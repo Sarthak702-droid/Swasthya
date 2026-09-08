@@ -1,112 +1,133 @@
-# ArogyaGrid — Complete Master Epics Registry (Epics 1 to 6)
+# ArogyaGrid — 10 PRD Epics Master Architecture Registry
 
-> **Repository:** `ArogyaGrid`  
-> **Source PRD:** [ArogyaGrid_Detailed_PRD.docx](file:///home/sarthaktripathy/Documents/Arogya/ArogyaGrid_Detailed_PRD.docx)  
-> **Status:** Epics 1–5 **COMPLETE (100%)** | Epic 6 (Chat & Copilot) **READY FOR BUILD**
-
----
-
-## Master Epics Overview Table
-
-| Epic Code | Epic Title | Lead Owner | Tasks | Status | Deliverable Code & Artifacts |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **EPIC-01** | **Foundation, Auth & Database Infrastructure** | 👑 Sarthak | 8 / 8 | `COMPLETE` | PostgreSQL multi-schema (`iam`, `core`, `work`, `audit`), JWT Auth, Idempotency, Monorepo runner |
-| **EPIC-02** | **Work Item Core Backend & State Machine** | 📋 Vaishnavi | 8 / 8 | `COMPLETE` | Work item domain models, State Machine, pgx v5 repository, Chi handlers, 19 passing unit tests |
-| **EPIC-03** | **Transitions, Queues & SLA Engine** | 🏥 Riya | 9 / 9 | `COMPLETE` | Assign/Accept/Return/Complete/Handoff transitions, Dynamic SLA engine, Activity timeline, Comments |
-| **EPIC-04** | **Frontend Work System & Interactive UI** | 🚚 Shneanjali | 10 / 10 | `COMPLETE` | Next.js App Router, TanStack Query hooks, Work Queue table, Slide-over panel, Action dialog modals |
-| **EPIC-05** | **System Integration, Work Generator & Seed** | 👑 Sarthak | 7 / 7 | `COMPLETE` | Autonomous generator, ticket deduplication guard, Odisha seed data, Next.js reverse proxy |
-| **EPIC-06** | **Operational Collaboration & AI Copilot Chat** | 🤖 Agent Team | 14 Tasks | `READY FOR BUILD` | `chat` schema, WebSocket/SSE hub, AI Resource Copilot, interactive cards, `/chat` page |
+> **Source PRD:** [ArogyaGrid_Detailed_PRD.docx](file:///home/sarthaktripathy/Documents/Arogya/ArogyaGrid_Detailed_PRD.docx) (Sections 5, 6, 7, 8, 9, 10, 11, 14, 18, 21, 23)  
+> **Status:** **10 Total Epics** (2 Complete • 8 In Progress/Roadmap)
 
 ---
 
-## Detailed Breakdown of Completed Epics (1 to 5)
+## Complete 10-Epic Architecture Matrix
 
-### 🟢 EPIC-01: Foundation, Auth & Database Infrastructure
+| # | Epic Code | Epic Title | Owner / Persona | Status | PRD Section | Key Deliverables |
+| :-: | :--- | :--- | :---: | :---: | :---: | :--- |
+| **1** | **EPIC-01** | **Foundation, Auth, Multi-Schema DB & DevOps** | 👑 Sarthak (Lead) | `COMPLETE` | PRD §7.1, §11, §14 | PostgreSQL 16 multi-schema (`iam`, `core`, `work`, `audit`), JWT HMAC-SHA256, Idempotency engine, Monorepo runner (`make dev`). |
+| **2** | **EPIC-02** | **Medicine Catalog & Operational Inventory Ledger** | 📋 Vaishnavi (District) | `IN_PROGRESS` | PRD §7.3, §7.4 | `core.medicines` master (criticality, cold chain), `inventory.balances`, `inventory.transactions` (stock-in, consumption, adjustment, negative stock invariant). |
+| **3** | **EPIC-03** | **Bed & Workforce Capacity Monitoring** | 🏥 Riya (Facility) | `IN_PROGRESS` | PRD §7.5 | `capacity.snapshots` (total beds, occupied beds, available beds, doctors, nurses), time-series tracking, capacity stress indicators. |
+| **4** | **EPIC-04** | **Demand Aggregation, Forecasting & Shortage Risk Engine** | 👑 Sarthak (Lead) | `IN_PROGRESS` | PRD §8 | `intelligence.daily_demand`, rolling 7-day average daily demand, 3–7 day demand projection, Days-of-Cover formula ($\text{DoC} = \frac{\text{Stock}}{\text{Demand}}$), Critical/High alerts. |
+| **5** | **EPIC-05** | **Safe Surplus Redistribution & Scoring Engine** | 📋 Vaishnavi (District) | `IN_PROGRESS` | PRD §9.1–9.4 | Protected safety stock, Safe Surplus formula ($\text{Stock} - \text{Safety} - \text{Demand Buffer}$), Multi-factor candidate scoring ($0.40 \times \text{Surplus} + 0.30 \times \text{Distance} + 0.20 \times \text{Safety} + 0.10 \times \text{Urgency}$). |
+| **6** | **EPIC-06** | **Transfer Lifecycle & Dual-Inventory Execution** | 🏥 Riya (Facility) | `IN_PROGRESS` | PRD §9.5, §9.6 | Transfer state machine (`recommended` ➔ `approved` ➔ `dispatched` ➔ `received` ➔ `completed`). ACID dual inventory updates (deduct source, credit destination). |
+| **7** | **EPIC-07** | **Operational Work Queue & Task Management System** | 🚚 Shneanjali (Logistics) | `COMPLETE` | PRD §6, §10 | Work items table, SLA breach policies, inter-facility handoffs, reason-coded returns, slide-over inspection drawer, queue views (My, Team, Urgent, Overdue, Waiting, Completed). |
+| **8** | **EPIC-08** | **Executive Dashboard & Leaflet Geographic Risk Map** | 🚚 Shneanjali (Logistics) | `IN_PROGRESS` | PRD §10 | Network KPI cards (Active facilities, critical shortages, active transfers, bed stress), Leaflet / OpenStreetMap color-coded facility pins (Red/Orange/Green), facility drilldowns. |
+| **9** | **EPIC-09** | **Operational Collaboration & AI Resource Copilot Chat** | 👑 Sarthak (Lead) | `IN_PROGRESS` | PRD Chat | Role-scoped channels (`#facility-internal`, `#district-emergency`, transfer threads), interactive stockout/transfer cards, ArogyaGrid AI Copilot with deterministic PRD tools. |
+| **10** | **EPIC-10** | **Automated Background Scheduler & Realistic Demo Dataset** | 👑 Sarthak (Lead) | `IN_PROGRESS` | PRD §18, §21 | `robfig/cron` background jobs (daily aggregation, forecast run, stale cleanup), realistic Odisha healthcare network dataset (10–20 facilities, 20–50 medicines, 30–90d history). |
+
+---
+
+## Detailed Breakdown of Each Epic
+
+### 🟢 EPIC-01: Foundation, Auth, Multi-Schema DB & DevOps
 * **Owner:** Sarthak (Team Leader & System Architect)
 * **Status:** `COMPLETE` (8/8 Tasks — 100%)
-* **Key Deliverables:**
-  1. `TASK-01-01`: Multi-Schema PostgreSQL Architecture (`apps/api/db/migrations/001_work_schema.sql`)
-  2. `TASK-01-02`: Migration Engine & sqlc Configuration (`db/sqlc.yaml`, `db/queries/work.sql`)
-  3. `TASK-01-03`: JWT Authentication & Authorization Middleware (`internal/middleware/auth.go`)
-  4. `TASK-01-04`: Idempotency Engine & Deduplication Storage (`internal/middleware/idempotency.go`)
-  5. `TASK-01-05`: IAM Database Tables & RBAC (`iam.users`, `iam.teams`, `iam.team_members`, `iam.sessions`)
-  6. `TASK-01-06`: Core Facility Registry (`core.facilities` table with lat/lon)
-  7. `TASK-01-07`: Centralized Config Loader (`internal/config/config.go`)
-  8. `TASK-01-08`: Unified Monorepo Runner (`Makefile`, `start-dashboard.sh`)
+* **Scope:**
+  * Multi-schema PostgreSQL 16 database architecture isolating `iam`, `core`, `work`, and `audit`.
+  * HMAC-SHA256 JWT auth middleware and Argon2id password security.
+  * Idempotency middleware (`Idempotency-Key` header) preventing duplicate mutations.
+  * Centralized configuration loader and monorepo runner (`make dev`).
 
 ---
 
-### 🟢 EPIC-02: Work Item Core Backend & State Machine
+### 🟡 EPIC-02: Medicine Catalog & Operational Inventory Ledger
 * **Owner:** Vaishnavi (District Officer & Core Domain Lead)
-* **Status:** `COMPLETE` (8/8 Tasks — 100%)
-* **Key Deliverables:**
-  1. `TASK-02-01`: Work Item Domain Models & Enums (`internal/work/models.go`)
-  2. `TASK-02-02`: Deterministic Finite State Machine (`internal/work/transitions.go`)
-  3. `TASK-02-03`: Repository Interface (`internal/work/repository.go`)
-  4. `TASK-02-04`: PostgreSQL Repository via pgx v5 (`internal/work/postgres_repository.go`)
-  5. `TASK-02-05`: Core Work Service Layer (`internal/work/service.go`)
-  6. `TASK-02-06`: RESTful Chi HTTP Route Handlers (`internal/work/handler.go`)
-  7. `TASK-02-07`: Request DTOs & Validation (`internal/work/dto.go`, `validation.go`)
-  8. `TASK-02-08`: Unit Tests (`transitions_test.go` — 19/19 passing tests)
+* **Status:** `IN_PROGRESS`
+* **Scope (PRD §7.3, §7.4):**
+  * `core.medicines` generic master catalog (code, generic_name, unit, criticality, cold_chain_flag).
+  * `inventory.balances` tracking current quantity and safety stock per facility-medicine.
+  * `inventory.transactions` append-only ledger (stock-in, consumption, transfer-in, transfer-out, adjustment).
+  * Hard invariant: Reject any transaction resulting in negative balance.
 
 ---
 
-### 🟢 EPIC-03: Transitions, Queues & SLA Engine
+### 🟡 EPIC-03: Bed & Workforce Capacity Monitoring
 * **Owner:** Riya (Facility Manager & Transitions Lead)
-* **Status:** `COMPLETE` (9/9 Tasks — 100%)
-* **Key Deliverables:**
-  1. `TASK-03-01`: Work Item Assignment & Team Routing (`service.go:AssignWorkItem`)
-  2. `TASK-03-02`: Worker Acceptance Pipeline (`service.go:AcceptWorkItem`)
-  3. `TASK-03-03`: Return Flow with Reason Codes (`service.go:ReturnWorkItem`)
-  4. `TASK-03-04`: Task Completion & Resolution Reporting (`service.go:CompleteWorkItem`)
-  5. `TASK-03-05`: Inter-Facility Handoff Protocol (`service.go:HandoffWorkItem`)
-  6. `TASK-03-06`: Dynamic SLA Policy Engine (`internal/work/sla_policy.go`)
-  7. `TASK-03-07`: Activity Timeline Synthesis (`internal/work/timeline.go`)
-  8. `TASK-03-08`: Internal Threaded Discussion & Comments API (`work.work_item_comments`)
-  9. `TASK-03-09`: Optimistic Concurrency Control (`version` checking)
+* **Status:** `IN_PROGRESS`
+* **Scope (PRD §7.5):**
+  * `capacity.snapshots` time-series table (total beds, occupied beds, available beds, doctors, nurses).
+  * Capacity stress index calculation on facility dashboard.
+  * Alerts for bed occupancy exceeding operational safety limits (>90%).
 
 ---
 
-### 🟢 EPIC-04: Frontend Work System & Interactive UI
+### 🟡 EPIC-04: Demand Aggregation, Forecasting & Shortage Risk Engine
+* **Owner:** Sarthak (Team Leader & Lead Architect)
+* **Status:** `IN_PROGRESS`
+* **Scope (PRD §8):**
+  * `intelligence.daily_demand` feature table aggregating consumption by date/facility/medicine.
+  * Rolling 7-day average daily demand calculation.
+  * Short-term 3-day and 7-day demand projections.
+  * Days-of-cover formula: $\text{DoC} = \frac{\text{Current Stock}}{\max(\text{Average Daily Demand}, 1)}$.
+  * Risk alerts: Critical (< 2 days), High (< 4 days), Medium (< 7 days) with reason codes.
+
+---
+
+### 🟡 EPIC-05: Safe Surplus Redistribution & Scoring Engine
+* **Owner:** Vaishnavi (District Officer & Core Domain Lead)
+* **Status:** `IN_PROGRESS`
+* **Scope (PRD §9.1–9.4):**
+  * Protected safety stock invariant: Donor must remain safe after transfer.
+  * Safe Surplus formula: $\text{Safe Surplus} = \text{Current Stock} - \text{Safety Stock} - \text{Predicted Demand Buffer}$.
+  * Haversine distance calculator between donor and recipient facilities.
+  * Multi-factor scoring algorithm: $0.40 \times \text{Surplus} + 0.30 \times \text{Proximity} + 0.20 \times \text{Safety} + 0.10 \times \text{Urgency}$.
+  * Explainable recommendation object with donor rankings and reasoning.
+
+---
+
+### 🟡 EPIC-06: Transfer Lifecycle & Dual-Inventory Execution
+* **Owner:** Riya (Facility Manager & Operations Lead)
+* **Status:** `IN_PROGRESS`
+* **Scope (PRD §9.5, §9.6):**
+  * Transfer state machine: `recommended` ➔ `approved` ➔ `dispatched` ➔ `received` ➔ `completed`.
+  * ACID dual inventory mutation: Automatically deduct donor stock on dispatch, and credit recipient stock on receipt.
+  * Rejection, cancellation, and expiration handling.
+  * Full audit trail integration for chain of custody.
+
+---
+
+### 🟢 EPIC-07: Operational Work Queue & Task Management System
 * **Owner:** Shneanjali (Logistics Officer & Frontend Lead)
 * **Status:** `COMPLETE` (10/10 Tasks — 100%)
-* **Key Deliverables:**
-  1. `TASK-04-01`: TypeScript Domain Types & Zod Schemas (`src/features/work/types/work.types.ts`)
-  2. `TASK-04-02`: API Client & Idempotency Key Injection (`src/lib/api-client.ts`)
-  3. `TASK-04-03`: TanStack React Query Hooks (`useWorkQueue`, `useWorkItem`, `useWorkMutations`)
-  4. `TASK-04-04`: Interactive Work Queue Table (`WorkQueueTable.tsx`)
-  5. `TASK-04-05`: Queue View Selector Tabs (`WorkQueueTabs.tsx`: My, Team, Urgent, Overdue, Waiting, Completed)
-  6. `TASK-04-06`: Slide-over Detail Inspection Panel (`WorkItemPanel.tsx`, `WorkItemHeader.tsx`)
-  7. `TASK-04-07`: Chronological Audit Timeline UI (`WorkTimeline.tsx`)
-  8. `TASK-04-08`: Threaded Comments Feed (`WorkComments.tsx`)
-  9. `TASK-04-09`: Operational Action Dialog Modals (Assign, Reassign, Handoff, Return, Complete)
-  10. `TASK-04-10`: Accessible UI Library & Healthcare Theme (`components/ui/*`, `globals.css`)
+* **Scope (PRD §6, §10):**
+  * Work item domain model, queue views (My Work, Team, Urgent, Overdue, Waiting, Completed).
+  * State transitions (`assign`, `accept`, `reassign`, `return`, `complete`, `handoff`).
+  * SLA policy engine with dynamic escalation.
+  * Slide-over inspection drawer, chronological audit timeline, threaded comments, and action modals.
 
 ---
 
-### 🟢 EPIC-05: System Integration, Work Generator & Seed Data
+### 🟡 EPIC-08: Executive Dashboard & Leaflet Geographic Risk Map
+* **Owner:** Shneanjali (Logistics Officer & Frontend Lead)
+* **Status:** `IN_PROGRESS`
+* **Scope (PRD §10):**
+  * High-level executive KPI cards (Active facilities, critical stockout alerts, pending transfers, bed stress).
+  * Interactive Leaflet / OpenStreetMap visualization of Odisha healthcare network.
+  * Color-coded facility risk pins (Red = Critical stockout/bed stress, Orange = High risk, Green = Stable).
+  * Facility detail view displaying inventory, capacity, forecasts, and transfer history.
+
+---
+
+### 🟡 EPIC-09: Operational Collaboration & AI Resource Copilot Chat
 * **Owner:** Sarthak (Team Leader & System Architect)
-* **Status:** `COMPLETE` (7/7 Tasks — 100%)
-* **Key Deliverables:**
-  1. `TASK-05-01`: Autonomous Work Item Generator (`internal/work/generator.go`)
-  2. `TASK-05-02`: Active Ticket Deduplication Guard (`postgres_repository.go`)
-  3. `TASK-05-03`: Dynamic Priority & SLA Severity Classifier (`sla_policy.go`)
-  4. `TASK-05-04`: Odisha Healthcare Realistic Seed Dataset (`scripts/seed/seed_work_items.sql`)
-  5. `TASK-05-05`: RBAC Permission Enforcement Layer (`internal/work/permissions.go`)
-  6. `TASK-05-06`: End-to-End Chi API Mounting (`cmd/server/main.go`)
-  7. `TASK-05-07`: Next.js Reverse Proxy & Unified Routing (`next.config.mjs`)
+* **Status:** `IN_PROGRESS` (Specification ready in `task/`)
+* **Scope (PRD Chat):**
+  * Role-scoped communication channels (`#facility-internal`, `#district-emergency`, transfer threads).
+  * Interactive chat cards for Stockout Alerts and Transfer Orders with 1-click approvals.
+  * ArogyaGrid AI Copilot with deterministic database tool-calling (stock, days of cover, safe surplus, capacity).
 
 ---
 
-## Upcoming Epic for Execution:
-
-### 🟡 EPIC-06: Operational Collaboration & AI Resource Copilot Chat
-* **Status:** `READY FOR IMPLEMENTATION` (14 Tasks across 6 Phases)
-* **Full Specification:** See [EPIC.md](file:///home/sarthaktripathy/Documents/Arogya/task/EPIC.md), [USER_STORIES.md](file:///home/sarthaktripathy/Documents/Arogya/task/USER_STORIES.md), and [TASKS.md](file:///home/sarthaktripathy/Documents/Arogya/task/TASKS.md).
-* **Phases:**
-  1. Database Schema (`002_chat_schema.sql` and `seed_chat.sql`)
-  2. Go Backend Models & Repository (`internal/chat`)
-  3. Go Service Layer, WebSocket Hub & Chi Handlers
-  4. ArogyaGrid AI Copilot Engine & Deterministic PRD Tools
-  5. Next.js Frontend Chat Interface (`apps/web/src/features/chat`)
-  6. Automated Tests & E2E Smoke Script
+### 🟡 EPIC-10: Automated Background Scheduler & Realistic Demo Dataset
+* **Owner:** Sarthak (Team Leader & System Architect)
+* **Status:** `IN_PROGRESS`
+* **Scope (PRD §18, §21):**
+  * `robfig/cron` in-process background scheduler for Go backend.
+  * Automated cron jobs: Daily demand aggregation, forecast recalculation, risk alert refresh, stale recommendation cleanup.
+  * Realistic Odisha healthcare seed dataset (15 facilities across Khurda/Cuttack/Puri, 30 essential medicines, 60 days history).
+  * Deterministic demo reset script for judging and evaluation.

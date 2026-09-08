@@ -50,6 +50,7 @@ done
 # 4. Start Next.js Frontend
 echo "--> [4/4] Launching Next.js Frontend on http://localhost:3000..."
 cd "$DIR/apps/web"
+rm -rf .next
 npm run dev > "$DIR/web.log" 2>&1 &
 WEB_PID=$!
 

@@ -1037,10 +1037,10 @@ export function EpicsBoardPage() {
             </div>
 
             <div className="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5">
-              <span className="text-xs text-slate-400 block font-medium">Core Epics</span>
+              <span className="text-xs text-slate-400 block font-medium">Total Epics</span>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-black text-white">5 / 5</span>
-                <span className="text-[11px] text-teal-300 font-semibold">Finished</span>
+                <span className="text-2xl font-black text-white">{EPICS_DATA.length}</span>
+                <span className="text-[11px] text-teal-300 font-semibold">5 Done • 1 Active</span>
               </div>
             </div>
 
@@ -1048,7 +1048,7 @@ export function EpicsBoardPage() {
               <span className="text-xs text-slate-400 block font-medium">Itemized Tasks</span>
               <div className="flex items-baseline gap-2 mt-1">
                 <span className="text-2xl font-black text-white">{totalTasks}</span>
-                <span className="text-[11px] text-slate-300 font-semibold">42 Done</span>
+                <span className="text-[11px] text-slate-300 font-semibold">{completedTasks} Done ({inProgressTasks} Active)</span>
               </div>
             </div>
 
@@ -1063,8 +1063,8 @@ export function EpicsBoardPage() {
             <div className="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5">
               <span className="text-xs text-slate-400 block font-medium">Database Schemas</span>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-black text-cyan-300">4</span>
-                <span className="text-[11px] text-cyan-200 font-semibold">iam/core/work/audit</span>
+                <span className="text-2xl font-black text-cyan-300">5</span>
+                <span className="text-[11px] text-cyan-200 font-semibold">iam/core/work/audit/chat</span>
               </div>
             </div>
 
@@ -1095,7 +1095,7 @@ export function EpicsBoardPage() {
                 }`}
               >
                 <Layers className="w-4 h-4 text-teal-600" />
-                <span>Group by Epic (5)</span>
+                <span>Group by Epic ({EPICS_DATA.length})</span>
               </button>
 
               <button

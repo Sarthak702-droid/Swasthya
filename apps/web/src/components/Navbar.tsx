@@ -12,7 +12,7 @@ export function Navbar() {
       label: 'Team Epics & Tasks',
       href: '/epics',
       icon: Layers,
-      badge: '5/5 Complete',
+      badge: '6 Epics (5 Done, 1 Active)',
       badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
     },
     {

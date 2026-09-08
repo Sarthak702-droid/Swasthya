@@ -53,7 +53,7 @@ export default function Home() {
                   <Layers className="w-6 h-6" />
                 </div>
                 <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                  5/5 Epics Complete (100%)
+                  6 Epics (5 Complete, 1 Active)
                 </span>
               </div>
 

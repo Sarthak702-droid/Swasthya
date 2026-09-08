@@ -73,6 +73,18 @@ const PROJECT_EPICS = [
     badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
     tasks: '5/5 tasks',
     description: 'Work generator, deduplication check, Odisha PHC seed dataset, audit trails'
+  },
+  {
+    id: 'epic-6',
+    code: 'EPIC-06',
+    title: 'Operational Chat & AI Copilot',
+    owner: 'Sarthak',
+    role: 'Lead & Agent Team',
+    status: 'IN_PROGRESS',
+    color: 'border-cyan-200 bg-cyan-50/60 hover:bg-cyan-50 text-cyan-900',
+    badgeColor: 'bg-cyan-100 text-cyan-800 border-cyan-300',
+    tasks: '14 tasks',
+    description: 'Role-scoped channels, interactive cards, and ArogyaGrid AI Copilot'
   }
 ];
 
@@ -179,11 +191,11 @@ export function WorkQueuePage() {
                   Looking for the Team Epics & Task Architecture Breakdown?
                 </h3>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                  5/5 Epics Done (42 Tasks)
+                  6 Epics (5 Complete, 1 Active)
                 </span>
               </div>
               <p className="text-xs text-slate-300 mt-0.5">
-                Inspect every single task delivered by <strong className="text-white">Sarthak</strong>, <strong className="text-white">Vaishnavi</strong>, <strong className="text-white">Riya</strong>, and <strong className="text-white">Shneanjali</strong>.
+                Inspect all 6 Epics & 56 itemized tasks engineered across <strong className="text-white">Sarthak</strong>, <strong className="text-white">Vaishnavi</strong>, <strong className="text-white">Riya</strong>, and <strong className="text-white">Shneanjali</strong>.
               </p>
             </div>
           </div>
@@ -212,20 +224,21 @@ export function WorkQueuePage() {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
-                All 5 Epics Complete (100%)
+                6 Epics Configured (5 Complete, 1 Active)
               </span>
               <Link
                 href="/epics"
                 className="text-xs font-bold text-teal-700 hover:text-teal-800 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded border border-teal-200 transition flex items-center gap-1"
               >
-                <span>Full Epic Breakdown →</span>
+                <span>Full 6 Epics Board →</span>
               </Link>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
             {PROJECT_EPICS.map((epic) => {
               const isSelected = selectedEpic.includes(epic.code) || (selectedEpic === epic.title);
+              const isComplete = epic.status === 'COMPLETE';
               
               return (
                 <div
@@ -237,8 +250,12 @@ export function WorkQueuePage() {
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold tracking-wider uppercase opacity-75">{epic.code}</span>
-                    <span className="text-[10px] font-semibold px-1.5 py-0.2 rounded-full bg-emerald-600 text-white">
-                      ✓ {epic.status}
+                    <span
+                      className={`text-[10px] font-semibold px-1.5 py-0.2 rounded-full ${
+                        isComplete ? 'bg-emerald-600 text-white' : 'bg-amber-500 text-white'
+                      }`}
+                    >
+                      {isComplete ? '✓ COMPLETE' : '⚡ ACTIVE'}
                     </span>
                   </div>
 
@@ -249,9 +266,11 @@ export function WorkQueuePage() {
                     <span className="text-slate-500">{epic.tasks}</span>
                   </div>
 
-                  {/* 100% Complete Progress Bar */}
+                  {/* Progress Bar */}
                   <div className="w-full bg-slate-200/80 rounded-full h-1.5 mt-2 overflow-hidden">
-                    <div className="bg-emerald-500 h-1.5 rounded-full w-full"></div>
+                    <div
+                      className={`h-1.5 rounded-full ${isComplete ? 'bg-emerald-500 w-full' : 'bg-amber-500 w-1/4'}`}
+                    ></div>
                   </div>
                 </div>
               );

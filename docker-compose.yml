@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: arogyagrid
+      POSTGRES_USER: arogyagrid
+      POSTGRES_PASSWORD: arogyagrid_dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - APP_ENV=development
+      - HTTP_PORT=8080
+      - DATABASE_URL=postgres://arogyagrid:arogyagrid_dev@postgres:5432/arogyagrid?sslmode=disable
+      - JWT_SECRET=your-secret-key-min-32-chars-change-me
+      - JWT_TTL_SECONDS=900
+      - CORS_ORIGINS=http://localhost:3000
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+
+volumes:
+  postgres_data:

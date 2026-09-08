@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: 'The Intelligent Health Resource Grid',
 };
 
+import { Navbar } from '@/components/Navbar';
+
 export default function RootLayout({
   children,
 }: {
@@ -18,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Navbar />
+          {children}
+        </Providers>
       </body>
     </html>
   );

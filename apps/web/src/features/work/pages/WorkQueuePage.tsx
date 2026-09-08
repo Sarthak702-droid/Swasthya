@@ -6,6 +6,8 @@ import { WorkQueueTable, getWorkItemEpic } from '../components/WorkQueueTable';
 import { WorkItemPanel } from '../components/WorkItemPanel';
 import { useWorkQueue } from '../hooks/useWorkQueue';
 import type { QueueView } from '../types/work.types';
+import Link from 'next/link';
+import { ArrowRight, Layers, ExternalLink } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -165,11 +167,41 @@ export function WorkQueuePage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-6 space-y-6">
+        {/* PROMINENT ROADMAP BANNER */}
+        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border border-slate-800">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-300 shrink-0">
+              <Layers className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm sm:text-base font-bold text-white">
+                  Looking for the Team Epics & Task Architecture Breakdown?
+                </h3>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  5/5 Epics Done (42 Tasks)
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-0.5">
+                Inspect every single task delivered by <strong className="text-white">Sarthak</strong>, <strong className="text-white">Vaishnavi</strong>, <strong className="text-white">Riya</strong>, and <strong className="text-white">Shneanjali</strong>.
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href="/epics"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold transition shadow shrink-0 hover:scale-105"
+          >
+            <span>Open Team Epics Board</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
         {/* ============================================================ */}
         {/* TEAM EPICS STATUS TRACKER */}
         {/* ============================================================ */}
         <section className="bg-white rounded-xl p-5 border shadow-sm">
-          <div className="flex items-center justify-between mb-3.5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3.5">
             <div>
               <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
                 Team Epics & Task Distribution
@@ -182,6 +214,12 @@ export function WorkQueuePage() {
               <span className="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
                 All 5 Epics Complete (100%)
               </span>
+              <Link
+                href="/epics"
+                className="text-xs font-bold text-teal-700 hover:text-teal-800 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded border border-teal-200 transition flex items-center gap-1"
+              >
+                <span>Full Epic Breakdown →</span>
+              </Link>
             </div>
           </div>
 

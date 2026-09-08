@@ -686,6 +686,189 @@ export const EPICS_DATA: EpicItem[] = [
         category: 'Frontend UI'
       }
     ]
+  },
+  {
+    id: 'epic-6',
+    code: 'EPIC-06',
+    title: 'Operational Collaboration & AI Resource Copilot Chat',
+    owner: 'Sarthak',
+    ownerRole: 'Lead Architect & Agent Team',
+    description:
+      'Role-scoped healthcare channels (Facility, District, Transfer context), interactive stockout/transfer cards, and ArogyaGrid AI Resource Copilot with deterministic PRD tool calling.',
+    status: 'IN_PROGRESS',
+    color: 'border-cyan-200 bg-cyan-50/50',
+    badgeBg: 'bg-cyan-100 text-cyan-800 border-cyan-300',
+    iconBg: 'bg-cyan-600',
+    tasks: [
+      {
+        id: 't-601',
+        code: 'TASK-CHAT-01',
+        title: 'PostgreSQL chat Schema & Tables Migration',
+        description: 'Create chat.channels, chat.channel_members, chat.messages tables with indexes in 002_chat_schema.sql.',
+        assignee: 'Sarthak',
+        assigneeRole: 'Team Leader',
+        status: 'COMPLETE',
+        files: ['apps/api/db/migrations/002_chat_schema.sql'],
+        verification: 'Migration schema specified in task/TASKS.md',
+        category: 'Database'
+      },
+      {
+        id: 't-602',
+        code: 'TASK-CHAT-02',
+        title: 'Seed Initial Chat Channels & Operational History',
+        description: 'Populate default channels (#khurda-district-emergency, #pipili-phc, #arogyagrid-copilot) with seed messages.',
+        assignee: 'Sarthak',
+        assigneeRole: 'Team Leader',
+        status: 'COMPLETE',
+        files: ['scripts/seed/seed_chat.sql'],
+        verification: 'Seed data specification defined in task/TASKS.md',
+        category: 'Database'
+      },
+      {
+        id: 't-603',
+        code: 'TASK-CHAT-03',
+        title: 'Go Domain Models, DTOs & Custom Errors',
+        description: 'Define Channel, Message, ChannelMember structs, DTOs, and typed domain errors in internal/chat.',
+        assignee: 'Vaishnavi',
+        assigneeRole: 'District Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/chat/models.go', 'apps/api/internal/chat/dto.go'],
+        verification: 'Compiles cleanly with go build',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-604',
+        code: 'TASK-CHAT-04',
+        title: 'PostgreSQL pgx Repository Implementation',
+        description: 'Implement Channel and Message persistence, query pagination, and member validation via pgxpool.',
+        assignee: 'Vaishnavi',
+        assigneeRole: 'District Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/chat/postgres_repository.go'],
+        verification: 'Queries tested against PostgreSQL chat schema',
+        category: 'Database'
+      },
+      {
+        id: 't-605',
+        code: 'TASK-CHAT-05',
+        title: 'Real-Time WebSocket Connection Hub & SSE Fallback',
+        description: 'Concurrent-safe connection manager supporting channel broadcast, user broadcast, and auto cleanup.',
+        assignee: 'Riya',
+        assigneeRole: 'Facility Manager',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/chat/hub.go'],
+        verification: 'Hub broadcast verified with multiple concurrent clients',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-606',
+        code: 'TASK-CHAT-06',
+        title: 'Chat Application Service Layer & RBAC Rules',
+        description: 'Coordinates message creation, content sanitization, permission validation, and copilot dispatch.',
+        assignee: 'Riya',
+        assigneeRole: 'Facility Manager',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/chat/service.go'],
+        verification: 'Unauthorized cross-facility chat rejected with 403',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-607',
+        code: 'TASK-CHAT-07',
+        title: 'RESTful Chi HTTP Handlers & WebSocket Route',
+        description: 'Mounts /api/v1/chat/* routes for channels, messages, history, read status, and WebSocket upgrader.',
+        assignee: 'Vaishnavi',
+        assigneeRole: 'District Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/chat/handler.go'],
+        verification: 'Chi router mounts /api/v1/chat cleanly',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-608',
+        code: 'TASK-CHAT-08',
+        title: 'Deterministic Domain Tools for AI Copilot',
+        description: 'Builds PRD-compliant tools querying inventory balances, days of cover, capacity, and safe surplus.',
+        assignee: 'Sarthak',
+        assigneeRole: 'Team Leader',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/chat/copilot_tools.go'],
+        verification: 'Tool returns exact stock without simulation',
+        category: 'Integration & Seed'
+      },
+      {
+        id: 't-609',
+        code: 'TASK-CHAT-09',
+        title: 'ArogyaGrid Copilot NLP Intent Processor',
+        description: 'Classifies natural language questions, extracts parameters, and formats explainable markdown answers.',
+        assignee: 'Sarthak',
+        assigneeRole: 'Team Leader',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/chat/copilot.go'],
+        verification: 'NLP correctly parses stock, risk, and bed capacity questions',
+        category: 'Integration & Seed'
+      },
+      {
+        id: 't-610',
+        code: 'TASK-CHAT-10',
+        title: 'Frontend TypeScript Types, API Client & Query Hooks',
+        description: 'Strongly typed contracts, chat API client with JWT headers, and TanStack useChat query hooks.',
+        assignee: 'Shneanjali',
+        assigneeRole: 'Logistics Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/web/src/features/chat/types/chat.types.ts', 'hooks/useChat.ts'],
+        verification: 'npm run build compiles types with 0 errors',
+        category: 'Frontend UI'
+      },
+      {
+        id: 't-611',
+        code: 'TASK-CHAT-11',
+        title: 'Interactive Chat UI, Channel Sidebar & Message Feed',
+        description: 'Next.js components: ChannelList, MessageFeed with role badges, MessageComposer, and Copilot quick chips.',
+        assignee: 'Shneanjali',
+        assigneeRole: 'Logistics Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/web/src/features/chat/components/MessageFeed.tsx', 'ChannelList.tsx'],
+        verification: 'Responsive chat interface renders in browser',
+        category: 'Frontend UI'
+      },
+      {
+        id: 't-612',
+        code: 'TASK-CHAT-12',
+        title: 'Interactive Action Cards for Stockout Alerts & Transfers',
+        description: 'Rich message cards for Stockout Alerts and Transfer Recommendations with 1-click action buttons.',
+        assignee: 'Shneanjali',
+        assigneeRole: 'Logistics Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/web/src/features/chat/components/InteractiveCards.tsx'],
+        verification: 'Cards render inline in chat stream with action triggers',
+        category: 'Frontend UI'
+      },
+      {
+        id: 't-613',
+        code: 'TASK-CHAT-13',
+        title: 'Backend Automated Unit & Integration Tests',
+        description: 'Unit test suite for chat service, permission validation, and copilot safe-surplus tool calculation.',
+        assignee: 'Vaishnavi',
+        assigneeRole: 'District Officer',
+        status: 'IN_PROGRESS',
+        files: ['apps/api/internal/chat/service_test.go', 'copilot_test.go'],
+        verification: 'go test -v ./internal/chat/... outputs PASS',
+        category: 'Backend Core'
+      },
+      {
+        id: 't-614',
+        code: 'TASK-CHAT-14',
+        title: 'Automated End-to-End Smoke Verification Script',
+        description: 'Bash automation script testing authentication, channel listing, message delivery, and copilot response.',
+        assignee: 'Sarthak',
+        assigneeRole: 'Team Leader',
+        status: 'IN_PROGRESS',
+        files: ['scripts/test_chat_e2e.sh'],
+        verification: 'Smoke script runs to completion with exit code 0',
+        category: 'Integration & Seed'
+      }
+    ]
   }
 ];
 

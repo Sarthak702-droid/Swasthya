@@ -10,7 +10,8 @@
 
 | File | Purpose | Description |
 | :--- | :--- | :--- |
-| **[EPIC.md](file:///home/sarthaktripathy/Documents/Arogya/task/EPIC.md)** | **Master Epic Specification** | Executive problem statement, architecture diagrams, PRD mapping, and system scope. |
+| **[ALL_EPICS_SUMMARY.md](file:///home/sarthaktripathy/Documents/Arogya/task/ALL_EPICS_SUMMARY.md)** | **Master Epics Registry (1 to 6)** | Complete inventory of Epics 1 to 5 (100% Complete) and Epic 6 (Chat & Copilot). |
+| **[EPIC.md](file:///home/sarthaktripathy/Documents/Arogya/task/EPIC.md)** | **Chat Master Epic Specification** | Executive problem statement, architecture diagrams, PRD mapping, and system scope. |
 | **[USER_STORIES.md](file:///home/sarthaktripathy/Documents/Arogya/task/USER_STORIES.md)** | **User Stories & Acceptance Criteria** | 7 user stories covering Facility Managers, District Officers, Logistics Drivers, and AI Copilot. |
 | **[TASKS.md](file:///home/sarthaktripathy/Documents/Arogya/task/TASKS.md)** | **Sequential Agent Execution Tasks** | 14 itemized, unambiguous tasks divided into 6 execution phases with exact code files and test commands. |
 
